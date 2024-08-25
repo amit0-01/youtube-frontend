@@ -77,6 +77,7 @@ function MyVideos() {
 
 
   return (
+    token ? 
     <div className="grid items-center p-4 m-3">
    <div className="relative">
   {/* Cover Image */}
@@ -180,9 +181,7 @@ function MyVideos() {
         </div>
       ))}
     </div>
-  </div>
-
-  
+  </div> : <h1 className='flex justify-center items-center h-screen text-3xl'>You need to Sign In </h1>
   );
 }
 

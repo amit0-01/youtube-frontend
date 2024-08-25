@@ -36,7 +36,7 @@ function Sidenav({ isSidenavOpen, toggleSidenav }: SidenavProps) {
               </a>
             </li>
             {/* Example for another route, uncomment and use as needed */}
-            <li className="py-2">
+            {/* <li className="py-2">
               <a
                 href="/playlist"
                 className={`block px-4 py-2 hover:bg-gray-700 ${
@@ -45,7 +45,7 @@ function Sidenav({ isSidenavOpen, toggleSidenav }: SidenavProps) {
               >
                 Playlist
               </a>
-            </li>
+            </li> */}
             <li className="py-2">
               <a
                 href="/my-videos"
