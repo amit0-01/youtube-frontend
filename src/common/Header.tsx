@@ -6,13 +6,14 @@ function Header({ toggleSidenav, isSidenavOpen, toggleForm }: HeaderProps) {
   const navigate = useNavigate();
   const [token, setToken] = useState<string | null>(null);
 
+
   useEffect(() => {
     const user = localStorage.getItem('userInfo');
     if (user) {
       const parseData = JSON.parse(user);
       setToken(parseData.accessToken); // Set token if it exists
     }
-  }, []);
+  },[]);
 
   const goToSignIn = () => {
     navigate('/sign-in');
@@ -20,6 +21,7 @@ function Header({ toggleSidenav, isSidenavOpen, toggleForm }: HeaderProps) {
 
   function logout(){
     localStorage.clear();
+    setToken('');
     navigate('/sign-in')
     
   }
