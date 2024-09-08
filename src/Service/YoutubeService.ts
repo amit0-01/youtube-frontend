@@ -236,7 +236,7 @@ export const signUp = async (formValues: any, token: any) => {
 };
 
 export const increaseViewCount = async(token: string,videoId: string)=>{
-  const url = `http://localhost:8000/api/v1/view/${videoId}`
+  const url = `${apiUrl}/api/v1/view/${videoId}`
  try {
   const res = await axios.post(url,{},getAuthHeaders(token));
   return res.data
