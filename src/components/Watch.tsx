@@ -253,9 +253,9 @@ const Watch: any = () => {
     { loading ? (
       <Loader/>
     ) : (
-    <div className='mx-3 my-3' >
-      <div className="grid grid-cols-3 gap-5">
-        <main className='col-span-2'>
+    <div className='md:mx-3 mx-1 my-3' >
+      <div className="grid md:grid-cols-3 gap-5">
+        <main className='md:col-span-2'>
           {videoFile && (
             <div>
               <video key={videoFile} controls className="w-full h-96">
@@ -280,7 +280,7 @@ const Watch: any = () => {
                   </Button>
                 </div>
               </div> */}
-                <div className="flex justify-between">
+                <div className="flex justify-between mx-3">
       <div className="flex items-center space-x-2 mt-5">
         <img
           src={data.thumbnail}
@@ -314,10 +314,10 @@ const Watch: any = () => {
           <span className="text-sm">26</span>
         </div>
         <i className="fa-regular fa-thumbs-down text-lg cursor-pointer" />
-        <i className="fa-solid fa-share text-lg cursor-pointer" />
-        <i className="fa-solid fa-download text-lg cursor-pointer" />
-        <i className="fa-solid fa-scissors text-lg cursor-pointer" />
-        <i className="fa-regular fa-bookmark text-lg cursor-pointer" />
+        <i className="fa-solid fa-share text-lg cursor-pointer hidden md:block" />
+        <i className="fa-solid fa-download text-lg cursor-pointer hidden  md:block" />
+        <i className="fa-solid fa-scissors text-lg cursor-pointer  md:block" />
+        <i className="fa-regular fa-bookmark text-lg cursor-pointer hidden md:block" />
         <Tooltip title={userLoggedInOrNot() ? 'Save video' : 'Login to save the video'}>
         <i className="fa-solid fa-ellipsis text-lg cursor-pointer" onClick={handleDialogForSaveVideo} />
         </Tooltip>
