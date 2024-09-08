@@ -1,9 +1,14 @@
-import React, { useEffect, useState, ChangeEvent } from 'react';
+import React, { useEffect, useState, ChangeEvent, useLayoutEffect } from 'react';
 import {useLocation } from 'react-router-dom';
 import { getLikedVideos, getIndividualVideoComments, addComment, likeComment, toogleLike, toogleSubscription, getSubscribedChannel, editComment, deleteComment, allVideos } from '../Service/YoutubeService'; 
 // import AddToPlaylistDialog from './AddToPlaylistDialog'; // import your AddToPlaylistDialog component
-import { Button, TextField, Dialog } from '@mui/material'; // MUI components for the dialog
-import AddToPlaylistDialog from './AddToPlaylistDialog';
+import { Button, TextField, Dialog, Input } from '@mui/material'; // MUI components for the dialog
+import AddToPlaylistDialog from './Dialog/AddToPlaylistDialog';
+import Loader from './Loader';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Tooltip from '@mui/material/Tooltip';
+
 
 interface Comment {
   _id: string;
@@ -18,7 +23,7 @@ interface Comment {
 //   user: string;
 // }
 
-const Watch: React.FC = () => {
+const Watch: any = () => {
   const location = useLocation();
   const data = location.state?.video;
 
@@ -36,44 +41,51 @@ const Watch: React.FC = () => {
   const [openDialog, setOpenDialog] = useState<boolean>(false);
   const [videoData, SetvideoData] = useState<any>([])
   const [counter,setCounter] = useState(1);
+  const [loading, setLoading] = useState<boolean>(false);
 
   // Fetch data on component mount
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem('userInfo') || '{}');
-
+  
     if (userData && userData.user) {      
       setUser(userData.user._id); 
       setToken(userData.accessToken);
     }
+  }, []); // Runs only once when the component mounts
+   
 
-    // if (data) {
-    //   setVideoFile(data.videoFile);
-    //   setVideoId(data._id);
-    // }
-    // if (data && !videoFile) { // Ensure it only sets once or under a specific condition
-    //   setVideoFile(data.videoFile);
-    //   setVideoId(data._id);
-    // }
+  
 
-    if (userData.accessToken && data && data._id) {
-      getLikedVideos(data._id, userData.accessToken).then((res: any) => {
-        setVideoIsLiked(!!res.likedVideos);
-      });
+   // New useEffect to handle fetching video-related data
+   useEffect(() => {
+    const fetchData = async () => {
+      console.log('fetchData is running');
 
-      getIndividualVideoComments(data._id, userData.accessToken).then((res: any) => {
-        setComments(res.data || []);
-      });
+      try {
+        // Ensure `data` exists before calling these functions
+        if (!data?._id) return;
 
-      getSubscribedChannel(userData.user._id, userData.accessToken).then((res: any) => {
-        setSubscribedToChannel(res.data.length !== 0);
-      });
-      
-    
+        const likedRes = await getLikedVideos(data._id, token);
+        setVideoIsLiked(!!likedRes.likedVideos);
+
+        const commentsRes = await getIndividualVideoComments(data._id, token);
+        setComments(commentsRes.data || []);
+
+        const subscribedRes = await getSubscribedChannel(user, token);
+        setSubscribedToChannel(subscribedRes.data.length !== 0);
+      } catch (error) {
+        console.error('Error fetching data', error);
+      }
+    };
+
+    // Only run fetchData if all dependencies are available
+    if (user && token && data?._id) {
+      fetchData();
     }
-  }, [location, data]);
+  }, [user, token, data]); // Depend on user, token, and data
 
   useEffect(() => {
-    if (data && counter==1) { // Ensure it only sets once or under a specific condition
+    if (data && counter==1) { 
       setVideoFile(data.videoFile);
       setVideoId(data._id);
       setCounter(counter+1);
@@ -82,22 +94,46 @@ const Watch: React.FC = () => {
   
 
   useEffect(() => {
-    allVideos().then((res:any)=>{      
-      SetvideoData(res);
-    })
-  },[]);
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const res = await allVideos(); // Await the result of allVideos()
+        SetvideoData(res); // Only set the data after fetching
+      } catch (error) {
+        console.error('Error fetching videos', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchData(); // Call the fetchData function inside useEffect
+  }, []); // Empty dependency array to run only once
 
 
 
   // Handle comment addition
-  const handleAddComment = () => {
+  const handleAddComment = async () => {
     if (user && token) {
-      addComment(videoId, token, commentContent).then(() => {
+      try {
+        setLoading(true);
+        const res = await addComment(videoId, token, commentContent);
         setCommentContent('');
-        getIndividualVideoComments(videoId, user.token).then((res:any) => setComments(res.data));
-      });
+  
+        if (res.success) {
+          const commentsRes = await getIndividualVideoComments(data._id, token);
+          setComments(commentsRes.data || []);
+          setLoading(false);
+          toast.success('Comment Added Successfully');
+        }
+        
+      } catch (error) {
+        console.error('Error adding comment:', error);
+        toast.error('Failed to add comment');
+      }
     }
   };
+  
+  
 
   // Handle like comment
   const handleLikeComment = (commentId: string) => {    
@@ -117,9 +153,9 @@ const Watch: React.FC = () => {
 
   // Toggle video like
   const handleToggleLike = () => {
-    
     if (user && token) {
       toogleLike(videoId,token).then((res:any) => {
+        toast.success(res.message);
         setVideoIsLiked(res.message === 'Video liked successfully');
       });
     }
@@ -128,14 +164,21 @@ const Watch: React.FC = () => {
   // Toggle subscription
   const handleToggleSubscription = () => {
     if (user && token) {
+      setLoading(true);
       toogleSubscription(user, token).then((res:any) => {
+        if(res.success){
+        toast.success(res.message);
         setSubscribedToChannel(res.message === 'Subscribed to channel successfully');
+        setLoading(false);
+        }
       });
     }
   };
 
   // Handle edit comment
   const handleEditComment = (comment: Comment) => {
+    console.log(comment);
+    
     if (user && user.token) {
       const obj = {
         commentId: comment._id,
@@ -153,8 +196,17 @@ const Watch: React.FC = () => {
   // Handle delete comment
   const handleDeleteComment = (commentId: string) => {
     if (user && token) {
-      deleteComment({ commentId, token: token }).then(() => {
-        getIndividualVideoComments(videoId, user.token).then((res:any) => setComments(res.data));
+      setLoading(true);
+      deleteComment({ commentId, token: token }).then((res) => {
+        if(res.success){
+          setComments((prevComments)=>prevComments.slice(0,-1));
+          setLoading(false);
+          toast.success('comment deleted succesfully')
+        }else{
+          toast.error('Failed to delte comment')
+        }
+        
+        // getIndividualVideoComments(videoId, user.token).then((res:any) => setComments(res.data));
       });
     }
   };
@@ -164,21 +216,49 @@ const Watch: React.FC = () => {
    setVideoFile(video.videoFile);   
   }
 
-  useEffect(() => {
-    console.log('Updated videoFile:', videoFile);
-  }, [videoFile]);
+  const userLoggedInOrNot = () => {
+    return !!token; // Returns true if token exists and is not falsy
+  };
 
+  // HANDLE DIALOG FOR SAVE VIDEO
+  const handleDialogForSaveVideo = () =>{
+    if(userLoggedInOrNot()){
+      setOpenDialog(true);
+    } else{
+      return;
+    }
+  }
+
+  // HANDLE CONTENT CHANGE
+  const handleContentChange = (e: ChangeEvent<HTMLInputElement>, commentId: string) => {
+    const newValue = e.target.value;
+    console.log(newValue); // This will log the new value being typed
+  
+    // Example of how you might update the comment based on the commentId
+    setComments(prevComments =>
+      prevComments.map((comment:any) =>
+        comment.id === commentId
+          ? { ...comment, content: newValue }
+          : comment
+      )
+    );
+  };
+  
   return (
-    <div className='lg:mx-16 lg:my-5 mx-2 my-2' >
-      <div className="grid md:flex lg:flex justify-between">
-        <main>
+    <>
+    { loading ? (
+      <Loader/>
+    ) : (
+    <div className='mx-3 my-3' >
+      <div className="grid grid-cols-3 gap-5">
+        <main className='col-span-2'>
           {videoFile && (
             <div>
-              <video key={videoFile} controls className="w-[900px] h-auto">
+              <video key={videoFile} controls className="w-full h-96">
                 <source src={videoFile} type="video/mp4" />
                 Your browser does not support the video tag.
               </video>
-              <div className="flex justify-between mt-4 gap-3">
+              {/* <div className="flex justify-between mt-4 gap-3">
                 <div className='flex gap-3'>
                   <Button variant="contained" color="primary" onClick={handleToggleLike}>
                     {videoIsLiked ? 'Unlike' : 'Like'}
@@ -195,7 +275,51 @@ const Watch: React.FC = () => {
                     Add to playlist
                   </Button>
                 </div>
-              </div>
+              </div> */}
+                <div className="flex justify-between">
+      <div className="flex items-center space-x-2 mt-5">
+        <img
+          src={data.thumbnail}
+          alt="Profile"
+          className="rounded-full w-10 h-10"
+        />
+        <div>
+          <h2 className="text-sm font-semibold">{data.ownerInfo.username}</h2>
+          <p className="text-xs text-gray-500">33.2K subscribers</p>
+        </div>
+      </div>
+      <div className='flex items-center gap-2'>
+        <div >
+        <Tooltip title={userLoggedInOrNot() ? (subscribedToChannel ? 'Unsubscribe from this channel' : 'Subscribe to this channel') : 'Sign in to subscribe to the channel'}>
+    <button
+      className="bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-medium"
+      onClick={handleToggleSubscription}
+    >
+      {subscribedToChannel ? 'Unsubscribe' : 'Subscribe'}
+    </button>
+  </Tooltip>
+      </div>
+      <div className="flex items-center space-x-4 ml-auto">
+        <div className="flex items-center space-x-1">
+        <Tooltip title={userLoggedInOrNot() ? 'Like' : 'Sign in to like this video'}>
+    <i
+      className={`fa-regular fa-thumbs-up text-lg cursor-pointer ${videoIsLiked ? 'text-blue-500' : 'text-gray-500'}`}
+      onClick={handleToggleLike}
+    />
+  </Tooltip>       
+          <span className="text-sm">26</span>
+        </div>
+        <i className="fa-regular fa-thumbs-down text-lg cursor-pointer" />
+        <i className="fa-solid fa-share text-lg cursor-pointer" />
+        <i className="fa-solid fa-download text-lg cursor-pointer" />
+        <i className="fa-solid fa-scissors text-lg cursor-pointer" />
+        <i className="fa-regular fa-bookmark text-lg cursor-pointer" />
+        <Tooltip title={userLoggedInOrNot() ? 'Save video' : 'Login to save the video'}>
+        <i className="fa-solid fa-ellipsis text-lg cursor-pointer" onClick={handleDialogForSaveVideo} />
+        </Tooltip>
+      </div>
+      </div>
+    </div>
               <div className="mt-4">
                 <TextField
                   value={commentContent}
@@ -216,12 +340,13 @@ const Watch: React.FC = () => {
                         {editingCommentId !== comment._id ? (
                           <div className="content mb-2">{comment.content}</div>
                         ) : (
-                          <div className="w-full">
-                            <TextField
-                              value={newContent}
-                              onChange={(e: ChangeEvent<HTMLInputElement>) => setNewContent(e.target.value)}
-                              fullWidth
-                            />
+                          <div className="w-full flex gap-2">
+                           <input
+                            value={comment.content}
+                            onChange={(e: ChangeEvent<HTMLInputElement>) => handleContentChange(e, comment._id)}
+                            className='w-full border outline-none'
+                          />
+
                             <div className="flex justify-end gap-2">
                               <Button variant="contained" color="primary" onClick={() => setEditingCommentId(null)}>
                                 Cancel
@@ -249,17 +374,17 @@ const Watch: React.FC = () => {
           )}
         </main>
        {/* side vide cards */}
-       <div className="grid gap-4 " >
+       <div className="grid gap-4 w-full " >
       {videoData.map((video:any, index:any) => (
         <div
           key={index}
-          className="flex w-full max-w-sm bg-white rounded-lg shadow-md overflow-hidden cursor-pointer"
+          className="flex w-full bg-white rounded-lg overflow-hidden cursor-pointer h-36"
           onClick={()=>handleVideoUrl(video)}
         >
           <div className="relative">
             {/* Thumbnail Image */}
             <img
-              className="w-full h-48 object-cover"
+              className="w-48 h-32 object-cover"
               src={video.thumbnail} // Assume the API provides a `thumbnailUrl` field
               alt="Thumbnail"
             />
@@ -296,6 +421,9 @@ const Watch: React.FC = () => {
 </Dialog>
 
     </div>
+    )
+    }
+    </>
   );
 };
 

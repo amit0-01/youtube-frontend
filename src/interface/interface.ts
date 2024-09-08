@@ -11,8 +11,9 @@ export interface SidenavProps {
 
 export interface VideoUploadFormProps {
   toggleForm: () => void;
+  loading: boolean;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
-
 
 export interface FormValues {
   username: string;

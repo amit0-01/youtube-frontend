@@ -1,7 +1,8 @@
 // src/components/AddToPlaylistDialog.js
 import React, { useEffect, useState } from 'react';
 import { Checkbox, TextField, Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
-import { getPlaylist, createPlaylist, addVideotoPlaylist, removeVideofromPlaylist } from '../Service/AddtoPlaylist';
+import { getPlaylist, createPlaylist, addVideotoPlaylist, removeVideofromPlaylist } from '../../Service/AddtoPlaylist';
+import Loader from '../Loader';
 
 interface Playlist {
   _id: string;
@@ -23,6 +24,7 @@ const AddToPlaylistDialog: React.FC<AddToPlaylistDialogProps> = ({ videoId, open
   const [playlistDescription, setPlaylistDescription] = useState('');
   const [token, setToken] = useState('');
   const [userId, setUserId] = useState('');
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     console.log('useEffect is running');
@@ -46,12 +48,15 @@ const AddToPlaylistDialog: React.FC<AddToPlaylistDialogProps> = ({ videoId, open
 
   const fetchUserPlaylist = async () => {
     try {
+      setLoading(true);
       const res = await getPlaylist(token, userId);
       if (res.success) {
         setUserPlaylist(res.data);
       }
     } catch (error) {
       console.error('Error fetching playlist:', error);
+    } finally{
+      setLoading(false);
     }
   };
 
@@ -101,6 +106,10 @@ const AddToPlaylistDialog: React.FC<AddToPlaylistDialogProps> = ({ videoId, open
   };
 
   return (
+    <> 
+    { loading? (
+      <Loader/>
+    ) : (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>Save Video to Playlist</DialogTitle>
       <DialogContent>
@@ -146,6 +155,9 @@ const AddToPlaylistDialog: React.FC<AddToPlaylistDialogProps> = ({ videoId, open
         </Button>
       </DialogActions>
     </Dialog>
+    )
+}
+    </>
   );
 };
 

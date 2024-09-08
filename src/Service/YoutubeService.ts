@@ -85,6 +85,8 @@ export const getLikedVideos = async (videoId: string, token: string) => {
 };
 
 export const getIndividualVideoComments = async (videoId: string, token: string) => {
+  console.log('token', token);
+  
   const url = `${apiUrl}/api/v1/comments/${videoId}`;
   const response = await axios.get(url, getAuthHeaders(token));
   return response.data;
@@ -218,3 +220,13 @@ export const signUp = async (formValues: any, token: any) => {
     throw error;
   }
 };
+
+export const increaseViewCount = async(token: string,videoId: string)=>{
+  const url = `http://localhost:8000/api/v1/view/${videoId}`
+ try {
+  const res = await axios.post(url,{},getAuthHeaders(token));
+  return res.data
+ } catch (error) {
+  console.log(error)
+ }
+}

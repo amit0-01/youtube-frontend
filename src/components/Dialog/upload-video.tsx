@@ -2,14 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { VideoUploadFormProps } from '../../interface/interface';
 import { uploadVideo } from '../../Service/YoutubeService';
 
-function VideoUploadForm({ toggleForm }: VideoUploadFormProps) {
+function VideoUploadForm({ toggleForm,  loading, setLoading }: VideoUploadFormProps) {
   const [token, setToken] = useState('');
   const [userId,setUserId] = useState('');
+  // const [loading, setLoading] = useState<boolean>(false);
+
 
   useEffect(() => {
     // Retrieve the stored userInfo from local storage
     const userData = localStorage.getItem('userInfo');
-
     if (userData) {
       try {
         // Parse the stored userData
@@ -81,7 +82,17 @@ function VideoUploadForm({ toggleForm }: VideoUploadFormProps) {
   // Handle form submission
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    uploadVideo(formValues, token,userId)
+    setLoading(true);
+
+    uploadVideo(formValues, token, userId).then((res: any) => {
+      if (res.success) {
+        setLoading(false);
+      }
+    }).catch((error) => {
+      console.error('Error uploading video:', error);
+      setLoading(false); // Ensure loading is reset on error as well
+    });
+
     toggleForm();
   };
 

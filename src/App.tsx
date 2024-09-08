@@ -4,33 +4,46 @@ import Header from './common/Header';
 import Sidenav from './common/Sidenav';
 import { Outlet } from 'react-router-dom';
 import VideoUploadForm from './components/Dialog/upload-video'
+import Loader from './components/Loader';
+import { ToastContainer } from 'react-toastify';
+
 
 function App() {
-  // State to manage sidenav visibility
-  const [isSidenavOpen, setIsSidenavOpen] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [isSidenavOpen, setIsSidenavOpen] = useState<boolean>(false);
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
 
-  // State to manage the visibility of the upload video dialog
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-
-  // Function to toggle sidenav visibility
-  const toggleSidenav = () => {
-    setIsSidenavOpen(!isSidenavOpen);
-  };
-
-  // Function to toggle dialog visibility
-  const toggleForm = () => {
-    setIsDialogOpen(!isDialogOpen);
-  };
+  const toggleSidenav = () => setIsSidenavOpen(!isSidenavOpen);
+  const toggleForm = () => setIsDialogOpen(!isDialogOpen);
 
   return (
     <div className="app-container overflow-hidden">
-      <Header toggleSidenav={toggleSidenav} isSidenavOpen={isSidenavOpen} toggleForm={toggleForm} />
-      <Sidenav isSidenavOpen={isSidenavOpen} toggleSidenav={toggleSidenav} />
-      {/* Outlet will render the matched child route */}
-      <div className={`content ${isSidenavOpen ? 'lg:ml-64' : 'lg:ml-0'} transition-all duration-300`}>
-        <Outlet />
-      </div>
-      {isDialogOpen && <VideoUploadForm toggleForm={toggleForm} />} {/* Conditionally render the dialog */}
+      {loading ? (
+        <Loader />
+      ) : (
+        <>
+          <Header 
+            toggleSidenav={toggleSidenav} 
+            isSidenavOpen={isSidenavOpen} 
+            toggleForm={toggleForm} 
+          />
+          <Sidenav 
+            isSidenavOpen={isSidenavOpen} 
+            toggleSidenav={toggleSidenav} 
+          />
+          <div className={`content ${isSidenavOpen ? 'lg:ml-64' : 'lg:ml-0'} transition-all duration-300`}>
+            <Outlet />
+          </div>
+          {isDialogOpen && (
+            <VideoUploadForm 
+              toggleForm={toggleForm} 
+              loading={loading} 
+              setLoading={setLoading} 
+            />
+          )}
+        </>
+      )}
+          <ToastContainer />
     </div>
   );
 }
