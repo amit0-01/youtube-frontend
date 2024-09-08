@@ -1,1 +1,1 @@
-export const apiUrl = 'https://mini-youtube-backend.onrender.com'
+export const apiUrl = 'http://localhost:8000'

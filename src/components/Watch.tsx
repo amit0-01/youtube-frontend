@@ -1,8 +1,8 @@
-import React, { useEffect, useState, ChangeEvent, useLayoutEffect } from 'react';
+import { useEffect, useState, ChangeEvent } from 'react';
 import {useLocation } from 'react-router-dom';
 import { getLikedVideos, getIndividualVideoComments, addComment, likeComment, toogleLike, toogleSubscription, getSubscribedChannel, editComment, deleteComment, allVideos } from '../Service/YoutubeService'; 
 // import AddToPlaylistDialog from './AddToPlaylistDialog'; // import your AddToPlaylistDialog component
-import { Button, TextField, Dialog, Input } from '@mui/material'; // MUI components for the dialog
+import { Button, TextField, Dialog } from '@mui/material'; // MUI components for the dialog
 import AddToPlaylistDialog from './Dialog/AddToPlaylistDialog';
 import Loader from './Loader';
 import { toast } from 'react-toastify';

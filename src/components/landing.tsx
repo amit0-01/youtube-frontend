@@ -5,7 +5,6 @@ import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import Header from '../common/Header';
 import Sidenav from '../common/Sidenav';
-import VideoUploadForm from './Dialog/upload-video';
 // import VideoUploadForm from './components/Dialog/upload-video'
 
 function App() {
@@ -33,7 +32,7 @@ function App() {
       <div className={`content ${isSidenavOpen ? 'lg:ml-64' : 'lg:ml-0'} transition-all duration-300`}>
         <Outlet />
       </div>
-      {isDialogOpen && <VideoUploadForm toggleForm={toggleForm} />} {/* Conditionally render the dialog */}
+      {/* {isDialogOpen && <VideoUploadForm toggleForm={toggleForm} />} Conditionally render the dialog */}
     </div>
   );
 }

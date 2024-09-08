@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { VideoUploadFormProps } from '../../interface/interface';
 import { uploadVideo } from '../../Service/YoutubeService';
 
-function VideoUploadForm({ toggleForm,  loading, setLoading }: VideoUploadFormProps) {
+function VideoUploadForm({ toggleForm,setLoading }: VideoUploadFormProps) {
   const [token, setToken] = useState('');
   const [userId,setUserId] = useState('');
   // const [loading, setLoading] = useState<boolean>(false);
