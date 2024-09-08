@@ -1,1 +1,1 @@
-export const apiUrl = 'https://mini-youtube-backend.onrender.com'
+export const apiUrl = 'https://mini-youtube-backend-pdmw.vercel.app'

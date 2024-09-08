@@ -15,6 +15,7 @@ interface Comment {
   content: string;
   owner: {
     username: string;
+    _id: string
   };
 }
 
@@ -59,8 +60,6 @@ const Watch: any = () => {
    // New useEffect to handle fetching video-related data
    useEffect(() => {
     const fetchData = async () => {
-      console.log('fetchData is running');
-
       try {
         // Ensure `data` exists before calling these functions
         if (!data?._id) return;
@@ -69,7 +68,7 @@ const Watch: any = () => {
         setVideoIsLiked(!!likedRes.likedVideos);
 
         const commentsRes = await getIndividualVideoComments(data._id, token);
-        setComments(commentsRes.data || []);
+        setComments(commentsRes.data || []);        
 
         const subscribedRes = await getSubscribedChannel(user, token);
         setSubscribedToChannel(subscribedRes.data.length !== 0);
@@ -77,12 +76,20 @@ const Watch: any = () => {
         console.error('Error fetching data', error);
       }
     };
-
     // Only run fetchData if all dependencies are available
     if (user && token && data?._id) {
       fetchData();
     }
   }, [user, token, data]); // Depend on user, token, and data
+
+  useEffect(()=>{
+    console.log(user);
+    },[user])
+
+    useEffect(()=>{
+      console.log(comments);
+      
+    },[comments])
 
   useEffect(() => {
     if (data && counter==1) { 
@@ -176,9 +183,7 @@ const Watch: any = () => {
   };
 
   // Handle edit comment
-  const handleEditComment = (comment: Comment) => {
-    console.log(comment);
-    
+  const handleEditComment = (comment: Comment) => {    
     if (user && user.token) {
       const obj = {
         commentId: comment._id,
@@ -232,7 +237,6 @@ const Watch: any = () => {
   // HANDLE CONTENT CHANGE
   const handleContentChange = (e: ChangeEvent<HTMLInputElement>, commentId: string) => {
     const newValue = e.target.value;
-    console.log(newValue); // This will log the new value being typed
   
     // Example of how you might update the comment based on the commentId
     setComments(prevComments =>
@@ -357,15 +361,40 @@ const Watch: any = () => {
                             </div>
                           </div>
                         )}
-                          <div className="flex gap-3" style={{ display: editingCommentId !== comment._id ? 'flex' : 'none' }}>
-                            <i onClick={() => setEditingCommentId(comment._id)} className="fa-solid fa-pen-to-square cursor-pointer" />
-                            <i onClick={() => handleDeleteComment(comment._id)} className="fa-solid fa-trash cursor-pointer" />
-                          </div>
+                     {user === comment.owner._id ? (
+                            <div className="flex gap-3" style={{ display: editingCommentId !== comment._id ? 'flex' : 'none' }}>
+                              <Tooltip title="Edit">
+                                <span>
+                                  <i onClick={() => setEditingCommentId(comment._id)} className="fa-solid fa-pen-to-square cursor-pointer" />
+                                </span>
+                              </Tooltip>
+                              <Tooltip title="Delete">
+                                <span>
+                                  <i onClick={() => handleDeleteComment(comment._id)} className="fa-solid fa-trash cursor-pointer" />
+                                </span>
+                              </Tooltip>
+                            </div>
+                          ) : <></>}
+
+                   
                       </div>
                       <div className="actions flex space-x-4">
-                        <i onClick={() => handleLikeComment(comment._id)} className="fa-regular fa-thumbs-up text-lg cursor-pointer" style={{ color: isLiked(comment._id) ? 'green' : 'inherit' }} />
-                        <i className="fa-regular fa-thumbs-down text-lg cursor-pointer" />
-                      </div>
+                            <Tooltip title="Like">
+                              <span>
+                                <i
+                                  onClick={() => handleLikeComment(comment._id)}
+                                  className="fa-regular fa-thumbs-up text-lg cursor-pointer"
+                                  style={{ color: isLiked(comment._id) ? 'green' : 'inherit' }}
+                                />
+                              </span>
+                            </Tooltip>
+
+                            <Tooltip title="Dislike">
+                              <span>
+                                <i className="fa-regular fa-thumbs-down text-lg cursor-pointer" />
+                              </span>
+                            </Tooltip>
+                          </div>
                     </div>
                   ))}
                 </div>
@@ -374,7 +403,7 @@ const Watch: any = () => {
           )}
         </main>
        {/* side vide cards */}
-       <div className="grid gap-4 w-full " >
+       <div className="flex flex-col gap-2 w-full " >
       {videoData.map((video:any, index:any) => (
         <div
           key={index}

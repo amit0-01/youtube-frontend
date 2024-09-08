@@ -23,9 +23,11 @@ export async function allVideos(){
 
 }
 
-export async function uploadVideo(formValues: { title: string, videoFile: File | null, thumbnail: File | null, description: string, duration: any }, token: string, userId:string) {
-  console.log(token);
-  
+export async function uploadVideo(
+  formValues: { title: string, videoFile: File | null, thumbnail: File | null, description: string, duration: any },
+  token: string,
+  userId: string
+) {
   const url = `${apiUrl}/${urlRoutes.uploadVideo}`;
 
   // Create a FormData object
@@ -33,42 +35,56 @@ export async function uploadVideo(formValues: { title: string, videoFile: File |
   formData.append('title', formValues.title);
   formData.append('description', formValues.description);
   formData.append('duration', formValues.duration);
-  formData.append('owner',userId)
-  
+  formData.append('owner', userId);
+
   if (formValues.videoFile) {
-      formData.append('videoFile', formValues.videoFile);
+    formData.append('videoFile', formValues.videoFile);
   }
-  
+
   if (formValues.thumbnail) {
-      formData.append('thumbnail', formValues.thumbnail);
+    formData.append('thumbnail', formValues.thumbnail);
   }
 
-  try {
-      // Send the form data
-      const response = await fetch(url, {      
-          method: 'POST',
-          headers: {
-              'Authorization': `Bearer ${token}`,
-              // Content-Type is not needed for FormData, fetch will set it automatically
-          },
-          body: formData // Pass FormData object as the body
-      });
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
 
-      if (!response.ok) {
-          // Log response status and body for debugging
-          const errorText = await response.text();
-          console.error('Upload error:', response.status, errorText);
-          throw new Error(`Failed to upload video: ${response.statusText}`);
+    // Open a connection
+    xhr.open('POST', url, true);
+
+    // Set the authorization header
+    xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+
+    // Track the upload progress
+    xhr.upload.onprogress = function (event) {
+      if (event.lengthComputable) {
+        const percentComplete = (event.loaded / event.total) * 100;
+        console.log(`Upload progress: ${percentComplete.toFixed(2)}%`);
+        // You can now update the progress bar here
       }
+    };
 
-      const data = await response.json();
-      console.log('Upload successful:', data);
-      return data;
-  } catch (error) {
-      console.error('Error in uploadVideo function:', error);
-      throw error;
-  }
+    // Listen for the request to complete
+    xhr.onload = function () {
+      if (xhr.status === 200) {
+        console.log('Upload successful:', xhr.responseText);
+        resolve(JSON.parse(xhr.responseText));
+      } else {
+        console.error('Upload error:', xhr.status, xhr.responseText);
+        reject(new Error(`Failed to upload video: ${xhr.statusText}`));
+      }
+    };
+
+    // Handle errors
+    xhr.onerror = function () {
+      console.error('Error in uploadVideo function:', xhr.statusText);
+      reject(new Error('Network error'));
+    };
+
+    // Send the request
+    xhr.send(formData);
+  });
 }
+
 
 
 const getAuthHeaders = (token: string) => ({
@@ -84,9 +100,7 @@ export const getLikedVideos = async (videoId: string, token: string) => {
   return response.data;
 };
 
-export const getIndividualVideoComments = async (videoId: string, token: string) => {
-  console.log('token', token);
-  
+export const getIndividualVideoComments = async (videoId: string, token: string) => {  
   const url = `${apiUrl}/api/v1/comments/${videoId}`;
   const response = await axios.get(url, getAuthHeaders(token));
   return response.data;

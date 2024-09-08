@@ -12,6 +12,9 @@ import MyVideos from './components/MyVideos.tsx';
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
+    <Routes>
+    <Route path="sign-in" element={<SignIn />} />
+    </Routes>
       <Routes>
         {/* The App component serves as the layout */}
         <Route path="/" element={<App />}>
@@ -21,7 +24,6 @@ createRoot(document.getElementById('root')!).render(
           <Route path="home" element={<Home />} />
           <Route path="watch" element={<Watch />} />
           <Route path="playlist" element={<Playlist />} />
-          <Route path="sign-in" element={<SignIn />} />
           <Route path="sign-up" element={<SignUpForm />} />
           <Route path='my-videos' element={<MyVideos/>} />
         </Route>

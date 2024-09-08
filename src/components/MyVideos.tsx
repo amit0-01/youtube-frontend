@@ -45,6 +45,8 @@ function MyVideos() {
   }, [userId, token]);
 
   function getIndidualVideo(data: any) {
+    console.log(data);
+    
     navigate(`/watch`, { state: { video: data } });
   }
 
@@ -129,7 +131,7 @@ function MyVideos() {
                 {/* Title */}
                 <h1 className='text-lg font-bold'>{data.title}</h1>
                 {/* Owner */}
-                <p className='text-gray-500'>{data.owner}</p>
+                <p className='text-gray-500'>{data.ownerInfo.username}</p>
                 <div className='flex'>
                   {/* Views */}
                   <p className='text-gray-500'>{data.views} views</p>
@@ -149,30 +151,36 @@ function MyVideos() {
                 </button>
               </div> */}
 
-<Button
-        id="basic-button"
-        aria-controls={open ? 'basic-menu' : undefined}
-        aria-haspopup="true"
-        aria-expanded={open ? 'true' : undefined}
-        onClick={handleClick}
-      >
-        <i className="fa-solid fa-ellipsis-vertical"></i>
-      </Button>
+     <i className="fa-solid fa-ellipsis-vertical ms-24"
+         id="basic-button"
+         aria-controls={open ? 'basic-menu' : undefined}
+         aria-haspopup="true"
+         aria-expanded={open ? 'true' : undefined}
+         onClick={handleClick}
+        ></i>
+
+      {/* Material UI Menu */}
       <Menu
         id="basic-menu"
         anchorEl={anchorEl}
         open={open}
-        onClose={handleClose}
+        onClose={handleClose} // Close when clicking outside
         MenuListProps={{
           'aria-labelledby': 'basic-button',
         }}
       >
-        <MenuItem 
-         onClick={(e) => { 
-          e.stopPropagation(); // Prevents triggering getIndidualVideo when clicking delete
-          handleDelete(data._id); 
-        }}
-        >Delete</MenuItem>
+        {/* Delete Menu Item with onClick */}
+        <MenuItem
+          onClick={(e) => { 
+            e.preventDefault();
+            e.stopPropagation(); // Prevent parent click handlers from triggering
+            handleDelete(data._id); // Call delete handler with item id
+            handleClose(); // Close the menu after delete
+          }}
+        >
+          Delete
+        </MenuItem>
+        {/* Uncomment other menu items if needed */}
         {/* <MenuItem onClick={handleClose}>My account</MenuItem>
         <MenuItem onClick={handleClose}>Logout</MenuItem> */}
       </Menu>
