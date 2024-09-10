@@ -253,12 +253,12 @@ const Watch: any = () => {
     { loading ? (
       <Loader/>
     ) : (
-    <div className='md:mx-3 mx-1 my-3' >
+    <div className='md:mx-3' >
       <div className="grid md:grid-cols-3 gap-5">
         <main className='md:col-span-2'>
           {videoFile && (
             <div>
-              <video key={videoFile} controls className="w-full h-96">
+              <video key={videoFile} controls className="w-full md:h-96 h-50">
                 <source src={videoFile} type="video/mp4" />
                 Your browser does not support the video tag.
               </video>
@@ -403,7 +403,7 @@ const Watch: any = () => {
           )}
         </main>
        {/* side vide cards */}
-       <div className="flex flex-col gap-2 w-full " >
+       <div className="flex flex-col gap-2 w-full mx-1 md:mx-0" >
       {videoData.map((video:any, index:any) => (
         <div
           key={index}

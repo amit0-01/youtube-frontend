@@ -66,7 +66,7 @@ function Home() {
               <img 
                 src={data.thumbnail} 
                 alt="Video Thumbnail" 
-                className='w-full h-40 object-fill rounded-lg' 
+                className='md:w-full md:h-40 object-fill rounded-lg' 
               />
               <div className='flex mx-2 my-2'>
                 {/* Owner's Profile Image */}

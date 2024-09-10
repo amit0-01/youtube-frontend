@@ -1,11 +1,14 @@
 import { HeaderProps } from "../interface/interface";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { Menu, MenuItem } from "@mui/material";
 
 function Header({ toggleSidenav, isSidenavOpen, toggleForm }: HeaderProps) {
   const navigate = useNavigate();
   const [token, setToken] = useState<string | null>(null);
+  const [anchorEl, setAnchorEl] = useState(null);
 
+  
 
   useEffect(() => {
     const user = localStorage.getItem('userInfo');
@@ -23,8 +26,22 @@ function Header({ toggleSidenav, isSidenavOpen, toggleForm }: HeaderProps) {
     localStorage.clear();
     setToken('');
     navigate('/sign-in')
-    
   }
+
+  
+  
+  const handleProfileClick = (event:any) => {
+    if (anchorEl) {
+      setAnchorEl(null);
+    } else {
+      setAnchorEl(event.currentTarget);
+    }
+  };
+
+  
+  const handleClose = () => {
+    setAnchorEl(null); // Close the menu
+  };
 
   return (
     <header
@@ -90,13 +107,30 @@ function Header({ toggleSidenav, isSidenavOpen, toggleForm }: HeaderProps) {
         <div className="flex items-center">
           <button
             onClick={toggleForm}
-            className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg mr-2 focus:outline-none focus:bg-blue-800"
+            className="bg-blue-600 hover:bg-blue-700 text-white font-bold md:py-2 md:px-4 rounded-lg mr-2 focus:outline-none focus:bg-blue-800 whitespace-nowrap px-1 py-1 "
           >
-            Upload Video
+            <i className="fa-solid fa-upload"></i>
+            Upload
           </button>
-          <button onClick={()=>logout()} className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:bg-red-800">
-            Logout
-          </button>
+          <div className="relative">
+      {/* Profile Div */}
+      <div
+        onClick={handleProfileClick}
+        className="px-4 py-2 rounded-full bg-green-950 cursor-pointer"
+      >
+        {/* Profile content */}
+        <p>A</p>
+      </div>
+
+      {/* MUI Menu */}
+      <Menu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+      >
+        <MenuItem onClick={logout}>Logout</MenuItem>
+      </Menu>
+    </div>
         </div>
       )}
     </header>
