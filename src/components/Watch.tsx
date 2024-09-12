@@ -26,9 +26,9 @@ interface Comment {
 
 const Watch: any = () => {
   const location = useLocation();
-  const data = location.state?.video;
+  const [data,setData] = useState(location.state?.video);
 
-  const [videoFile, setVideoFile] = useState<string | null>(null);
+  // const [videoFile, setVideoFile] = useState<string | null>(null);
   const [videoId, setVideoId] = useState<string>('');
   const [user, setUser] = useState<any | null>(null);
   const [token, setToken]= useState<any | null>('');
@@ -93,7 +93,9 @@ const Watch: any = () => {
 
   useEffect(() => {
     if (data && counter==1) { 
-      setVideoFile(data.videoFile);
+      console.log(data);
+      
+      // setVideoFile(data.videoFile);
       setVideoId(data._id);
       setCounter(counter+1);
     }
@@ -218,7 +220,9 @@ const Watch: any = () => {
 
   // change video when click 
   const handleVideoUrl = (video:any) =>{
-   setVideoFile(video.videoFile);   
+    setData(video)
+    
+  //  setVideoFile(video.videoFile);   
   }
 
   const userLoggedInOrNot = () => {
@@ -256,10 +260,10 @@ const Watch: any = () => {
     <div className='md:mx-3' >
       <div className="grid md:grid-cols-3 gap-5">
         <main className='md:col-span-2'>
-          {videoFile && (
+          {data.videoFile && (
             <div>
-              <video key={videoFile} controls className="w-full md:h-96 h-50">
-                <source src={videoFile} type="video/mp4" />
+              <video key={data.videoFile} controls className="w-full md:h-96 h-50">
+                <source src={data.videoFile} type="video/mp4" />
                 Your browser does not support the video tag.
               </video>
               {/* <div className="flex justify-between mt-4 gap-3">
@@ -280,6 +284,7 @@ const Watch: any = () => {
                   </Button>
                 </div>
               </div> */}
+              <div className='mt-3 font-bold'>{data.title}</div>
                 <div className="flex justify-between mx-3">
       <div className="flex items-center space-x-2 mt-5">
         <img
