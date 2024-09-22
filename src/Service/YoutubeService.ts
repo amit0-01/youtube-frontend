@@ -1,26 +1,24 @@
 import {apiUrl} from '../../constant'
 import { urlRoutes } from './urlService';
 import axios from 'axios';
-export async function allVideos(){
-    const url = `${apiUrl}/${urlRoutes.getVideo}`;
+export async function allVideos(text?: string) {
+  const baseUrl = `${apiUrl}/${urlRoutes.getVideo}`;
   
-  const headers = {
-    'Authorization': `Bearer ${'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjkyMjViODllYzNlOTMyYzI3ODc3NTUiLCJlbWFpbCI6ImFtaXQxMjM0NUBnbWFpbC5jb20iLCJ1c2VybmFtZSI6ImFtaXQxMjM0NSIsImZ1bGxuYW1lIjoiQW1pdCBrdW1hciIsImlhdCI6MTcyMzQ5Mjk5MiwiZXhwIjoxNzIzNTc5MzkyfQ.7z6qAEsm91FFtOWMzgq7NnvWXDe_yWMbZ6khA8sjcDU'}`,
-    'Content-Type': 'application/json'
-  };
-  
-  const response = await fetch(url, {
-    method: 'GET', // Assuming you're making a GET request
-    headers: headers
+  const url = new URL(baseUrl);
+
+  if (text) {
+    url.searchParams.append('query', text);
+  }
+  const response = await fetch(url.toString(), {
+    method: 'GET', 
   });
-  
+
   if (!response.ok) {
     throw new Error('Failed to fetch videos');
   }
-  
+
   const data = await response.json();
   return data.data;
-
 }
 
 export async function uploadVideo(

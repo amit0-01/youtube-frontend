@@ -8,6 +8,7 @@ import Loader from './Loader';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Tooltip from '@mui/material/Tooltip';
+import { dateAgo } from '../Service/Function';
 
 
 interface Comment {
@@ -285,7 +286,7 @@ const Watch: any = () => {
                 </div>
               </div> */}
               <div className='mt-3 font-bold'>{data.title}</div>
-                <div className="flex justify-between mx-3">
+                <div className="flex gap-6 md:justify-between mx-3">
       <div className="flex items-center space-x-2 mt-5">
         <img
           src={data.thumbnail}
@@ -301,14 +302,14 @@ const Watch: any = () => {
         <div >
         <Tooltip title={userLoggedInOrNot() ? (subscribedToChannel ? 'Unsubscribe from this channel' : 'Subscribe to this channel') : 'Sign in to subscribe to the channel'}>
     <button
-      className="bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-medium"
+      className="bg-blue-600 text-white px-1 py-0.5 md:px-4 md:py-2 rounded-full text-sm font-medium"
       onClick={handleToggleSubscription}
     >
       {subscribedToChannel ? 'Unsubscribe' : 'Subscribe'}
     </button>
   </Tooltip>
       </div>
-      <div className="flex items-center space-x-4 ml-auto">
+      <div className="flex items-center gap-2 md:space-x-4 ml-auto">
         <div className="flex items-center space-x-1">
         <Tooltip title={userLoggedInOrNot() ? 'Like' : 'Sign in to like this video'}>
     <i
@@ -329,14 +330,15 @@ const Watch: any = () => {
       </div>
       </div>
     </div>
-              <div className="mt-4">
+              <div className="flex gap-1 mt-4">
                 <TextField
                   value={commentContent}
                   onChange={(e: ChangeEvent<HTMLInputElement>) => setCommentContent(e.target.value)}
                   placeholder="Add a comment"
                   fullWidth
+                  sx={{ height: "40px", "& .MuiInputBase-root": { height: "100%" } }}
                 />
-                <div className='mt-3'>
+                <div >
                 <Button variant="contained" color="primary" onClick={handleAddComment}>
                   Comment
                 </Button>
@@ -408,7 +410,7 @@ const Watch: any = () => {
           )}
         </main>
        {/* side vide cards */}
-       <div className="flex flex-col gap-2 w-full mx-1 md:mx-0" >
+       <div className="flex flex-col gap-2 w-full mx-1 md:mx-0 md:mt-2" >
       {videoData.map((video:any, index:any) => (
         <div
           key={index}
@@ -418,7 +420,7 @@ const Watch: any = () => {
           <div className="relative">
             {/* Thumbnail Image */}
             <img
-              className="w-48 h-32 object-cover"
+              className="w-48 h-32 object-cover rounded-lg"
               src={video.thumbnail} // Assume the API provides a `thumbnailUrl` field
               alt="Thumbnail"
             />
@@ -435,10 +437,10 @@ const Watch: any = () => {
               {video.title} {/* Assuming your API returns a `title` field */}
             </h3>
             {/* Channel Name */}
-            <p className="text-sm text-gray-600">{video._id}</p>
+            <p className="text-sm text-gray-600">{video.ownerInfo.username}</p>
             {/* View Count and Time */}
             <p className="text-xs text-gray-500">
-              {video.views} • {video.createdAt} {/* Adjust these fields according to your API */}
+              {video.views} {video.views<=1? 'view' : 'views'} • {dateAgo(video.createdAt)} {/* Adjust these fields according to your API */}
             </p>
           </div>
         </div>

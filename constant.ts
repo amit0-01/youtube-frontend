@@ -1,1 +1,1 @@
-export const apiUrl = 'https://mini-youtube-backend-pdmw.vercel.app'
+export const apiUrl = 'http://localhost:8000'

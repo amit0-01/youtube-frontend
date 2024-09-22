@@ -1,12 +1,13 @@
-import { HeaderProps } from "../interface/interface";
-import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { Menu, MenuItem } from "@mui/material";
+  import { HeaderProps } from "../interface/interface";
+  import { useNavigate } from "react-router-dom";
+  import { useEffect, useState } from "react";
+  import { Menu, MenuItem } from "@mui/material";
 
-function Header({ toggleSidenav, isSidenavOpen, toggleForm }: HeaderProps) {
-  const navigate = useNavigate();
-  const [token, setToken] = useState<string | null>(null);
-  const [anchorEl, setAnchorEl] = useState(null);
+  function Header({ toggleSidenav, isSidenavOpen, toggleForm }: HeaderProps) {
+    const navigate = useNavigate();
+    const [token, setToken] = useState<string | null>(null);
+    const [anchorEl, setAnchorEl] = useState(null);
+
 
   
 
@@ -43,6 +44,15 @@ function Header({ toggleSidenav, isSidenavOpen, toggleForm }: HeaderProps) {
     setAnchorEl(null); // Close the menu
   };
 
+  // HANDLE SEARCH INPUT
+  // const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const searchParam = event.target.value;
+  //   setSearch(searchParam)
+
+  // const handleClick = () =>{
+  //   onSearchTextChange('hello')
+  // }
+
   return (
     <header
       className={`bg-gray-900 text-white p-4 flex items-center justify-between transition-all duration-300 ease-in-out ${
@@ -51,49 +61,25 @@ function Header({ toggleSidenav, isSidenavOpen, toggleForm }: HeaderProps) {
     >
       <div className="flex items-center">
         <button onClick={toggleSidenav}>
-          <svg
-            className="h-8 w-8 text-white"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M4 6h16M4 12h16m-7 6h7"
-            ></path>
-          </svg>
+        <i className="fa-solid fa-bars"></i>
         </button>
-        <img
+        {/* <i className="fa-brands fa-youtube ms-20 text-4xl"></i> */}
+        {/* <img
           src="https://yt3.googleusercontent.com/584JjRp5QMuKbyduM_2k5RlXFqHJtQ0qLIPZpwbUjMJmgzZngHcam5JMuZQxyzGMV5ljwJRl0Q=s900-c-k-c0x00ffffff-no-rj"
           alt="Logo"
-          className="h-8 mr-4 cursor-pointer"
-        />
+          className="h-8 cursor-pointer"
+        /> */}
       </div>
-      <div className={`flex-grow mx-4`}>
+      <div>
         <div className="relative">
           <input
             type="text"
             placeholder="Search"
-            className="w-full p-2 pl-10 rounded-lg bg-gray-800 text-white border border-gray-700 focus:outline-none focus:border-red-500"
+            className="w-full p-2  rounded-lg bg-gray-800 text-white border border-gray-700 focus:outline-none focus:border-red-500"
           />
-          <svg
-            className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M8 16l4-4-4-4m8 0h-8"
-            ></path>
-          </svg>
+          <i className="fa-solid fa-magnifying-glass absolute right-3 top-3"></i>
         </div>
+        {/* <button onClick={handleClick}>hello</button> */}
       </div>
 
       {!token ? (

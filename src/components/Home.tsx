@@ -4,12 +4,21 @@ import {  useNavigate } from 'react-router-dom';
 import { dateAgo } from '../Service/Function';
 import Loader from './Loader';
 
+
 function Home() {
   const [videos, setVideos] = useState([]);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [token, setToken]= useState<any | null>('');
   const [count,setCount] = useState(0);
+  // const { searchText } = useOutletContext<{ searchText: string }>();
+
+  // useEffect(() => {
+  //   console.log("Search text in Home component:", searchText);
+  //   // You can now use searchText in this component
+  // }, [searchText]);
+  
+
 
   // FETCH TOKEN
   useEffect(() => {
