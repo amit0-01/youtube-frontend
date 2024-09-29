@@ -3,7 +3,7 @@
   import { useEffect, useState } from "react";
   import { Menu, MenuItem } from "@mui/material";
 
-  function Header({ toggleSidenav, isSidenavOpen, toggleForm }: HeaderProps) {
+  function Header({ toggleSidenav, isSidenavOpen, toggleForm, setSearchTerm }: HeaderProps) {
     const navigate = useNavigate();
     const [token, setToken] = useState<string | null>(null);
     const [anchorEl, setAnchorEl] = useState(null);
@@ -45,9 +45,10 @@
   };
 
   // HANDLE SEARCH INPUT
-  // const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   const searchParam = event.target.value;
-  //   setSearch(searchParam)
+  const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const searchParam = event.target.value;
+    setSearchTerm(searchParam);    
+  }
 
   // const handleClick = () =>{
   //   onSearchTextChange('hello')
@@ -76,6 +77,7 @@
             type="text"
             placeholder="Search"
             className="w-full p-2  rounded-lg bg-gray-800 text-white border border-gray-700 focus:outline-none focus:border-red-500"
+            onChange={handleInput}
           />
           <i className="fa-solid fa-magnifying-glass absolute right-3 top-3"></i>
         </div>

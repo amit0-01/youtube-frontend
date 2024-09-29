@@ -1,7 +1,7 @@
 import {apiUrl} from '../../constant'
 import { urlRoutes } from './urlService';
 import axios from 'axios';
-export async function allVideos(text?: string) {
+export async function allVideos(text?: string) {  
   const baseUrl = `${apiUrl}/${urlRoutes.getVideo}`;
   
   const url = new URL(baseUrl);

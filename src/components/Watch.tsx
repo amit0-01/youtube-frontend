@@ -343,6 +343,7 @@ const Watch: any = () => {
                   Comment
                 </Button>
                 </div>
+                </div>
                 <div id="comments-container" className="mt-4 space-y-4">
                   {comments.map((comment) => (
                     <div key={comment._id} className="comment bg-gray-50 p-4 rounded shadow">
@@ -405,7 +406,6 @@ const Watch: any = () => {
                     </div>
                   ))}
                 </div>
-              </div>
             </div>
           )}
         </main>

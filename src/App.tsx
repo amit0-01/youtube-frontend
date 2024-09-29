@@ -7,11 +7,11 @@ import VideoUploadForm from './components/Dialog/upload-video'
 import Loader from './components/Loader';
 import { ToastContainer } from 'react-toastify';
 
-
 function App() {
   const [loading, setLoading] = useState<boolean>(false);
   const [isSidenavOpen, setIsSidenavOpen] = useState<boolean>(false);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+  const [searchTerm, setSearchTerm] = useState<string>('');
 
   const toggleSidenav = () => setIsSidenavOpen(!isSidenavOpen);
   const toggleForm = () => setIsDialogOpen(!isDialogOpen);
@@ -26,13 +26,14 @@ function App() {
             toggleSidenav={toggleSidenav} 
             isSidenavOpen={isSidenavOpen} 
             toggleForm={toggleForm} 
+            setSearchTerm={setSearchTerm} 
           />
           <Sidenav 
             isSidenavOpen={isSidenavOpen} 
             toggleSidenav={toggleSidenav} 
           />
           <div className={`content ${isSidenavOpen ? 'lg:ml-64' : 'lg:ml-0'} transition-all duration-300`}>
-            <Outlet />
+            <Outlet context={{ searchTerm }} />
           </div>
           {isDialogOpen && (
             <VideoUploadForm 

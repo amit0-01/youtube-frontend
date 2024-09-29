@@ -2,7 +2,7 @@ export interface HeaderProps {
   toggleSidenav: () => void;
   isSidenavOpen: boolean;
   toggleForm: () => void;
-  // onSearchTextChange: (text:string) => void; 
+  setSearchTerm: (searchTerm: string) => void;
 }
 
 export interface SidenavProps {

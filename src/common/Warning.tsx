@@ -1,6 +1,13 @@
 import React from 'react';
 import { Dialog, DialogActions, DialogContent, DialogTitle, Button } from '@mui/material';
 
+interface WarningDialogProps {
+  open: boolean;
+  title: string;
+  content: string | React.ReactNode; // Allow string or JSX content
+  onConfirm: () => void;
+  onCancel: () => void;
+}
 
 const WarningDialog: React.FC<WarningDialogProps> = ({ open, title, content, onConfirm, onCancel }) => {
   return (

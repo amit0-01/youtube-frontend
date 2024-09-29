@@ -48,12 +48,22 @@ function Sidenav({ isSidenavOpen, toggleSidenav }: SidenavProps) {
             </li> */}
             <li className="py-2">
               <a
-                href="/my-videos"
+                href="/tweets"
+                className={`block px-4 py-2 hover:bg-gray-700 ${
+                  location.pathname === '/tweets' ? 'bg-gray-700' : ''
+                }`}
+              >
+                Tweets
+              </a>
+            </li>
+            <li className="py-2">
+              <a
+                href="/my-content"
                 className={`block px-4 py-2 hover:bg-gray-700 ${
                   location.pathname === '/my-videos' ? 'bg-gray-700' : ''
                 }`}
               >
-                My Videos
+                My Content
               </a>
             </li>
           </ul>

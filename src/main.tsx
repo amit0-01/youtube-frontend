@@ -8,7 +8,8 @@ import Playlist from './components/Playlist';
 import Watch from './components/Watch.tsx';
 import SignIn from './components/SignIn.tsx';
 import SignUpForm from './components/SignUp.tsx';
-import MyVideos from './components/MyVideos.tsx';
+import Tweets from './components/Tweets.tsx';
+import MyContent from './components/MyContent.tsx';
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
@@ -25,7 +26,8 @@ createRoot(document.getElementById('root')!).render(
           <Route path="watch" element={<Watch />} />
           <Route path="playlist" element={<Playlist />} />
           <Route path="sign-up" element={<SignUpForm />} />
-          <Route path='my-videos' element={<MyVideos/>} />
+          <Route path='my-content' element={<MyContent/>} />
+          <Route path='tweets' element={<Tweets/>}/>
         </Route>
       </Routes>
     </BrowserRouter>
