@@ -17,10 +17,7 @@ function MyContent() {
 
 
    useEffect(() => {
-    const userData = JSON.parse(localStorage.getItem('userInfo') || '{}');
-    console.log(userData);
-    
-
+    const userData = JSON.parse(localStorage.getItem('userInfo') || '{}');    
     if (userData && userData.user) {
       // setUserId(userData.user._id);
       setToken(userData.accessToken);

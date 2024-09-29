@@ -22,9 +22,6 @@ function MyVideos() {
 
     useEffect(() => {
         const userData = JSON.parse(localStorage.getItem('userInfo') || '{}');
-        console.log(userData);
-        
-    
         if (userData && userData.user) {
           setUserId(userData.user._id);
           setToken(userData.accessToken);
@@ -61,9 +58,7 @@ function MyVideos() {
 
     // GO TO WATCH
 
-    function getIndidualVideo(data: any) {
-        console.log(data);
-        
+    function getIndidualVideo(data: any) {        
         navigate(`/watch`, { state: { video: data } });
       }
 
@@ -83,12 +78,9 @@ function MyVideos() {
     
   // delete the video
 
-        const handleDelete = (videoId:string) => {
-            console.log(videoId);
-            
+        const handleDelete = (videoId:string) => {            
             deleteUserVideo(token, videoId, userId).then((res:any)=>{
                 setLoading(true);
-                console.log(res);
                 setVideos(res.data);
                 setLoading(false);
             })    

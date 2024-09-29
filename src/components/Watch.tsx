@@ -83,19 +83,8 @@ const Watch: any = () => {
     }
   }, [user, token, data]); // Depend on user, token, and data
 
-  useEffect(()=>{
-    console.log(user);
-    },[user])
-
-    useEffect(()=>{
-      console.log(comments);
-      
-    },[comments])
-
   useEffect(() => {
-    if (data && counter==1) { 
-      console.log(data);
-      
+    if (data && counter==1) {       
       // setVideoFile(data.videoFile);
       setVideoId(data._id);
       setCounter(counter+1);

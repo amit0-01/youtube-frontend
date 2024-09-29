@@ -1,8 +1,6 @@
 import axios from "axios";
 import { apiUrl } from "../../constant";
-export const getPlaylist = async (token:any, userId:any) => {
-    console.log("token",token);
-    
+export const getPlaylist = async (token:any, userId:any) => {    
     try {
       const response = await axios.get(`${apiUrl}/api/v1/playlist/user/${userId}`, {
         headers: { Authorization: `Bearer ${token}` },

@@ -27,8 +27,6 @@ const AddToPlaylistDialog: React.FC<AddToPlaylistDialogProps> = ({ videoId, open
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    console.log('useEffect is running');
-
     const userDataString = localStorage.getItem('userInfo');
     if (userDataString !== null) {
       const userData = JSON.parse(userDataString);
@@ -40,7 +38,6 @@ const AddToPlaylistDialog: React.FC<AddToPlaylistDialogProps> = ({ videoId, open
   useEffect(() => {
     // Only fetch the playlist when userId and token are set
     if (userId && token) {
-      console.log('User ID and Token are set:', userId, token);
       fetchUserPlaylist();
     }
   }, [userId, token]);
@@ -99,9 +96,7 @@ const AddToPlaylistDialog: React.FC<AddToPlaylistDialogProps> = ({ videoId, open
     }
   };
 
-  const isVideoInPlaylist = (playlist: Playlist) => {
-    console.log(playlist.videos.some((video: any) => video._id === videoId));
-    
+  const isVideoInPlaylist = (playlist: Playlist) => {    
     return playlist.videos.some((video: any) => video._id === videoId);
   };
 

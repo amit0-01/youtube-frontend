@@ -19,7 +19,6 @@ function MyTweets() {
         const userData = JSON.parse(localStorage.getItem("userInfo") || "{}");
         
         if (userData && userData.user) {
-          console.log('userData', userData);  // Log the parsed data first
           setUser(userData);
         } else {
           console.log('No user data found in localStorage');
@@ -33,7 +32,6 @@ function MyTweets() {
       setLoading(true);
       if(user){
       const response = await getAllUserTweets(user?.accessToken, user?.user._id)
-      console.log('response', response);
       if(response.success){
           setTweets(response.data)
           setLoading(false);
@@ -51,7 +49,6 @@ function MyTweets() {
     const handleDelete = async(tweetId:string)=>{
       setLoading(true);
      const response = await deleteTweet(tweetId, user.accessToken)
-     console.log('delete tweet', response);
      if(response.success){
       getUserTweets();
       setLoading(false);
@@ -72,7 +69,8 @@ function MyTweets() {
   
     if (tweetToEdit) {
       const response = await EditTweet(tweetId, tweetToEdit.content, user.accessToken);
-      console.log('edited tweet', response);
+      console.log(response);
+      
       getUserTweets(); 
       setEditTweetId(null);
     } else {

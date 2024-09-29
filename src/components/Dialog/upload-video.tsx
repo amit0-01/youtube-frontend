@@ -21,9 +21,7 @@ function VideoUploadForm({ toggleForm,setLoading }: VideoUploadFormProps) {
           setToken(parsedData.accessToken);          
         }
 
-        if (parsedData.user) {
-          console.log(parsedData);
-          
+        if (parsedData.user) {          
           setUserId(parsedData.user._id);
           
         }
@@ -67,11 +65,8 @@ function VideoUploadForm({ toggleForm,setLoading }: VideoUploadFormProps) {
     const videoElement = document.createElement('video');
     const objectURL = URL.createObjectURL(file);
 
-    videoElement.addEventListener('loadedmetadata', () => {
-      console.log(videoElement);
-      
+    videoElement.addEventListener('loadedmetadata', () => {      
       const duration = videoElement.duration;
-      console.log('Video Duration:', duration);
       setFormValues(prev => ({ ...prev, duration: duration.toFixed(2) })); // Set duration with 2 decimal places
       URL.revokeObjectURL(objectURL); // Clean up URL object
     });

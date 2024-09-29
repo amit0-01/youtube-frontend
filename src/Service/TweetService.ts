@@ -62,9 +62,7 @@ const deleteTweet = async(tweetId:string, token: string)=>{
 
 // EDIT THE TWEET
 
-const EditTweet = async (tweetId: string, content: string ,token: string) =>{
-    console.log('conotnet', content);
-    
+const EditTweet = async (tweetId: string, content: string ,token: string) =>{    
     const Url = `${apiUrl}/${urlRoutes.postTweet}/${tweetId}`
     const config = {
         headers: {

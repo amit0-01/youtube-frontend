@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FormValues, FormErrors } from '../interface/interface';
 import { signIn } from '../Service/YoutubeService';
+import { toast, ToastContainer } from 'react-toastify';
+
 
 const Login: React.FC = () => {
   const [formValues, setFormValues] = useState<FormValues>({ username: '', password: '' });
@@ -24,19 +26,24 @@ const Login: React.FC = () => {
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const validationErrors = validateForm();
-    if (Object.keys(validationErrors).length === 0) {
-      console.log('Form Values:', formValues);
-      const response = await signIn(formValues)
-      localStorage.setItem('userInfo', JSON.stringify(response.data))
-      navigate('/home')
-    } else {
-      setErrors(validationErrors);
+    try {
+      e.preventDefault();
+      const validationErrors:any = validateForm();
+      if (Object.keys(validationErrors).length === 0) {
+        const response = await signIn(formValues)
+        localStorage.setItem('userInfo', JSON.stringify(response.data))
+        navigate('/home')
+      } else {
+        setErrors(validationErrors);
+      }
+    } catch (error:any) {
+      toast.error('Incorrect email or password');
     }
   };
 
   return (
+    <>
+    <ToastContainer />
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="w-full max-w-sm bg-white p-8 rounded-lg shadow-lg">
         <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
@@ -92,6 +99,7 @@ const Login: React.FC = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

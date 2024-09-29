@@ -19,7 +19,6 @@ function Tweets() {
     try {
       setLoading(true);
       const allTweets = await getAllTweets();
-      console.log("allTweets", allTweets.statusCode.data.tweets);
       setTweets(allTweets.statusCode.data.tweets);
     } catch (error) {
       console.error("Error fetching tweets:", error);
@@ -41,10 +40,8 @@ function Tweets() {
 
   // TOGGLE LIKE AND DISLIKE
   const handleLikeTweet = async (tweetId: string) => {
-    console.log("tweetid", tweetId);
     try {
       const response = await toggleTweetLikeDisLike(tweetId, token);
-      console.log("toggleLikeResponse", response);
       toast.success(response.message);
       fetchAllTweets(); // Refresh tweets after toggling like/dislike
     } catch (error) {
@@ -59,9 +56,14 @@ function Tweets() {
       return;
     }
 
+    if(!token){
+      toast.error('Login to Tweet');
+      return;
+    }
+
     try {
       const response = await postTweet(tweetContent, token);
-      console.log("response", response);
+      console.log(response);
       toast.success("Tweet posted successfully!");
       setTweetContent(""); // Clear input after posting
       fetchAllTweets(); // Refresh tweets after posting
@@ -82,7 +84,7 @@ function Tweets() {
                     <div className="bg-gray-800 p-4 rounded-lg shadow-md">
                         <div className="flex items-center">
                             <img
-                                src={user?.coverImage}
+                                src={user?.coverImage || 'https://png.pngtree.com/png-clipart/20230927/original/pngtree-man-avatar-image-for-profile-png-image_13001882.png'}
                                 alt="User"
                                 className="w-10 h-10 rounded-full"
                             />
