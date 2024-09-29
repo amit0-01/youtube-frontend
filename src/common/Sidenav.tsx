@@ -60,7 +60,7 @@ function Sidenav({ isSidenavOpen, toggleSidenav }: SidenavProps) {
               <a
                 href="/my-content"
                 className={`block px-4 py-2 hover:bg-gray-700 ${
-                  location.pathname === '/my-videos' ? 'bg-gray-700' : ''
+                  location.pathname === '/my-content' ? 'bg-gray-700' : ''
                 }`}
               >
                 My Content

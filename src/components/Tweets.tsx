@@ -40,6 +40,10 @@ function Tweets() {
 
   // TOGGLE LIKE AND DISLIKE
   const handleLikeTweet = async (tweetId: string) => {
+    if(!token){
+      toast.error("Login to Like tweet")
+      return;
+    }
     try {
       const response = await toggleTweetLikeDisLike(tweetId, token);
       toast.success(response.message);
@@ -123,8 +127,8 @@ function Tweets() {
                                     <p className="text-gray-200 mt-2">{tweet.content}</p>
                                     <div className="flex justify-between items-center mt-2 text-gray-400">
                                         <div className="flex items-center">
-                                        <Tooltip title="Like Tweet" arrow>
-                                            <span className="cursor-pointer">
+                                        <Tooltip title={token ? "Like Tweet" : "Login to Like Tweet"} arrow>
+                                        <span className="cursor-pointer">
                                                 <i
                                                 className="fa-solid fa-thumbs-up"
                                                 onClick={() => handleLikeTweet(tweet._id)}
@@ -132,7 +136,7 @@ function Tweets() {
                                             </span>
                                             </Tooltip>
 
-                                            <Tooltip title="Dislike Tweet" arrow>
+                                            <Tooltip title={token ? "Dislike Tweet": "Login to Dislike tweet"} arrow>
                                                 <span className="cursor-pointer ml-3">
                                                     <i className="fa-solid fa-thumbs-down"></i>
                                                 </span>

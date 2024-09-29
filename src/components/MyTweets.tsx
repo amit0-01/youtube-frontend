@@ -123,7 +123,6 @@ function MyTweets() {
         onConfirm={handleConfirmDelete}
         onCancel={handleCloseDialog}
       />
-
                     <Tooltip title="Edit" arrow>
                       <span className="cursor-pointer">
                         <i className="fa-solid fa-pen-to-square" onClick={() => setEditTweetId(tweet._id)}></i>

@@ -2,11 +2,15 @@
   import { useNavigate } from "react-router-dom";
   import { useEffect, useState } from "react";
   import { Menu, MenuItem } from "@mui/material";
+  import { useLocation } from 'react-router-dom';
+
 
   function Header({ toggleSidenav, isSidenavOpen, toggleForm, setSearchTerm }: HeaderProps) {
     const navigate = useNavigate();
     const [token, setToken] = useState<string | null>(null);
     const [anchorEl, setAnchorEl] = useState(null);
+    const location = useLocation();
+
 
 
   
@@ -76,10 +80,10 @@
           <input
             type="text"
             placeholder="Search"
-            className="w-full p-2  rounded-lg bg-gray-800 text-white border border-gray-700 focus:outline-none focus:border-red-500"
+            className={` w-full p-2  rounded-lg bg-gray-800 text-white border border-gray-700 focus:outline-none focus:border-red-500 ${location.pathname === '/home' ? 'block' : 'hidden' }`}
             onChange={handleInput}
           />
-          <i className="fa-solid fa-magnifying-glass absolute right-3 top-3"></i>
+          <i className={`fa-solid fa-magnifying-glass absolute right-3 top-3 ${location.pathname === '/home' ? 'block' : 'hidden'}`}></i>
         </div>
         {/* <button onClick={handleClick}>hello</button> */}
       </div>
