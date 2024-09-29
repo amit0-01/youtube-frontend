@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { dateAgo } from '../Service/Function'
 import { deleteTweet, EditTweet, getAllUserTweets } from '../Service/TweetService';
-import { IconButton, Input, Tooltip } from '@mui/material';
+import {Input, Tooltip } from '@mui/material';
 import WarningDialog from '../common/Warning';
 import Loader from './Loader';
 function MyTweets() {

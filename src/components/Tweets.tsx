@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { getAllTweets, postTweet, toggleTweetLikeDisLike } from '../Service/TweetService';
 import { dateAgo } from '../Service/Function';
 import Loader from './Loader';

@@ -1,9 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { convertoMinute } from '../Service/Function';
-import { deleteUserVideo, getUserVideos } from '../Service/UserProfile';
-import {  useNavigate } from 'react-router-dom';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
 import { Box, Tabs, Tab } from '@mui/material';
 import MyTweets from './MyTweets';
 import MyVideos from './MyVideos';
@@ -11,7 +6,7 @@ import MyVideos from './MyVideos';
 function MyContent() {
 
    const [token, setToken] = useState('');
-   const [userId,setUserId] = useState('');
+  //  const [userId,setUserId] = useState('');
    const[coverImage, setCoverImage] = useState('');
    const[avatar,setAvatar] = useState('');
    const [userName, setUsername] = useState('');
@@ -27,7 +22,7 @@ function MyContent() {
     
 
     if (userData && userData.user) {
-      setUserId(userData.user._id);
+      // setUserId(userData.user._id);
       setToken(userData.accessToken);
       setCoverImage(userData.user.coverImage);
       setAvatar(userData.user.avatar);
