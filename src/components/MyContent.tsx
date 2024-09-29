@@ -36,7 +36,7 @@ function MyContent() {
 
   // CHANEG TABS
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
 
