@@ -44,7 +44,6 @@ const Watch: any = () => {
   const [videoData, SetvideoData] = useState<any>([])
   const [counter,setCounter] = useState(1);
   const [loading, setLoading] = useState<boolean>(false);
-  const [isSharePopupOpen, setIsSharePopupOpen] = useState(false);
 
 
   // Fetch data on component mount
