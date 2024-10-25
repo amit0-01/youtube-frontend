@@ -65,10 +65,10 @@ function MyVideos() {
 
     // 
 
-    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-        event.preventDefault();  // Prevents the default action
-        event.stopPropagation(); 
-        setAnchorEl(event.currentTarget);
+    const handleClick = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+      // event.preventDefault();
+        e.stopPropagation(); 
+        setAnchorEl(e.currentTarget);
       };
       const handleClose = () => {
         setAnchorEl(null);
@@ -100,16 +100,17 @@ function MyVideos() {
     ) :(
   <div className='grid md:grid-cols-5 gap-5  mt-2'>
   {videos.map((data:any) => (
-    <div key={data._id} >
-      <div onClick={() => getIndidualVideo(data)} className='cursor-pointer'>
-        {/* Thumbnail Image */}
-        <img 
-          src={data.thumbnail} 
-          alt="Video Thumbnail" 
-          className='w-full h-48 object-cover rounded-lg' 
-        />
-        <div className='flex mx-2 my-2'>
-          {/* Owner's Profile Image */}
+    <div key={data._id}>
+    <div onClick={() => getIndidualVideo(data)} className='cursor-pointer'>
+      {/* Thumbnail Image */}
+      <img 
+        src={data.thumbnail} 
+        alt="Video Thumbnail" 
+        className='w-full h-48 object-cover rounded-lg' 
+      />
+      <div className='flex mx-2 my-2 justify-between'>
+        {/* Owner's Profile Image */}
+        <div className='flex'>
           <img 
             src="https://images.pexels.com/photos/20780444/pexels-photo-20780444/free-photo-of-person-hand-holding-shiny-glass-mug.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" 
             alt="Owner" 
@@ -127,52 +128,46 @@ function MyVideos() {
               <p className='text-gray-500 ms-1'>{convertoMinute(data.duration)}</p>
             </div>
           </div>
-          {/* <div className='ms-auto'>
-            <button 
-              onClick={(e) => { 
-                e.stopPropagation(); // Prevents triggering getIndidualVideo when clicking delete
-                handleDelete(data._id); 
-              }}
-              className="text-red-500 hover:text-red-700"
-            >
-              Delete
-            </button>
-          </div> */}
- <i className="fa-solid fa-ellipsis-vertical ms-24"
-     id="basic-button"
-     aria-controls={open ? 'basic-menu' : undefined}
-     aria-haspopup="true"
-     aria-expanded={open ? 'true' : undefined}
-     onClick={handleClick}
-    ></i>
-  {/* Material UI Menu */}
-  <Menu
-    id="basic-menu"
-    anchorEl={anchorEl}
-    open={open}
-    onClose={handleClose} // Close when clicking outside
-    MenuListProps={{
-      'aria-labelledby': 'basic-button',
-    }}
-  >
-    {/* Delete Menu Item with onClick */}
-    <MenuItem
-      onClick={(e) => { 
-        e.preventDefault();
-        e.stopPropagation(); // Prevent parent click handlers from triggering
-        handleDelete(data._id); // Call delete handler with item id
-        handleClose(); // Close the menu after delete
-      }}
-    >
-      Delete
-    </MenuItem>
-    {/* Uncomment other menu items if needed */}
-    {/* <MenuItem onClick={handleClose}>My account</MenuItem>
-    <MenuItem onClick={handleClose}>Logout</MenuItem> */}
-  </Menu>
         </div>
+        <i
+        className="fa-solid fa-ellipsis-vertical cursor-pointer bg-transparent flex h-fit rounded-3xl"
+        id="basic-button"
+        aria-controls={open ? 'basic-menu' : undefined}
+        aria-haspopup="true"
+        aria-expanded={open ? 'true' : undefined}
+        onClick={(e) => {
+          e.stopPropagation(); // Prevents parent div onClick from firing
+          handleClick(e); // Handle menu opening
+        }}
+        style={{ outline: 'none' }} // Removes outline when focused
+      ></i>
+
+        {/* Material UI Menu */}
+        <Menu
+          id="basic-menu"
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleClose} // Close when clicking outside
+          MenuListProps={{
+            'aria-labelledby': 'basic-button',
+          }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Delete Menu Item with onClick */}
+          <MenuItem
+            onClick={(e) => { 
+              e.preventDefault();
+              e.stopPropagation(); 
+              handleDelete(data._id); 
+              handleClose(); 
+            }}
+          >
+            Delete
+          </MenuItem>
+        </Menu>
       </div>
     </div>
+  </div>
   ))}
 </div>
     )

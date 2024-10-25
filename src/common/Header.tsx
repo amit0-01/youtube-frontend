@@ -80,10 +80,10 @@
           <input
             type="text"
             placeholder="Search"
-            className={` w-full p-2  rounded-lg bg-gray-800 text-white border border-gray-700 focus:outline-none focus:border-red-500 ${location.pathname === '/home' ? 'block' : 'hidden' }`}
+            className={` md:w-full h-8 p-2  md:h-full w-32  rounded-lg bg-gray-800 text-white border border-gray-700 focus:outline-none focus:border-red-500 ${location.pathname === '/home' ? 'block' : 'hidden' }`}
             onChange={handleInput}
           />
-          <i className={`fa-solid fa-magnifying-glass absolute right-3 top-3 ${location.pathname === '/home' ? 'block' : 'hidden'}`}></i>
+        <i className={`fa-solid fa-magnifying-glass absolute right-3 top-3 ${location.pathname === '/home' ? 'hidden lg:block' : 'hidden'}`}></i>
         </div>
         {/* <button onClick={handleClick}>hello</button> */}
       </div>

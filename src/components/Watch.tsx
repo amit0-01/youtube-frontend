@@ -44,6 +44,8 @@ const Watch: any = () => {
   const [videoData, SetvideoData] = useState<any>([])
   const [counter,setCounter] = useState(1);
   const [loading, setLoading] = useState<boolean>(false);
+  const [isSharePopupOpen, setIsSharePopupOpen] = useState(false);
+
 
   // Fetch data on component mount
   useEffect(() => {
@@ -54,6 +56,14 @@ const Watch: any = () => {
       setToken(userData.accessToken);
     }
   }, []); // Runs only once when the component mounts
+
+
+  // GET COMMENTS
+
+  const getComments = async()=>{
+    const commentsRes = await getIndividualVideoComments(data._id, token);
+    setComments(commentsRes.data || []);      
+  }
    
 
   
@@ -67,9 +77,7 @@ const Watch: any = () => {
 
         const likedRes = await getLikedVideos(data._id, token);
         setVideoIsLiked(!!likedRes.likedVideos);
-
-        const commentsRes = await getIndividualVideoComments(data._id, token);
-        setComments(commentsRes.data || []);        
+        await getComments();
 
         const subscribedRes = await getSubscribedChannel(user, token);
         setSubscribedToChannel(subscribedRes.data.length !== 0);
@@ -119,7 +127,7 @@ const Watch: any = () => {
         setCommentContent('');
   
         if (res.success) {
-          const commentsRes = await getIndividualVideoComments(data._id, token);
+          const commentsRes = await getIndividualVideoComments(data._id, token);          
           setComments(commentsRes.data || []);
           setLoading(false);
           toast.success('Comment Added Successfully');
@@ -241,6 +249,8 @@ const Watch: any = () => {
       )
     );
   };
+ 
+  
   
   return (
     <>
@@ -309,7 +319,7 @@ const Watch: any = () => {
           <span className="text-sm">26</span>
         </div>
         <i className="fa-regular fa-thumbs-down text-lg cursor-pointer" />
-        <i className="fa-solid fa-share text-lg cursor-pointer hidden md:block" />
+        <i className="fa-solid fa-share text-lg cursor-pointer hidden md:block "/>
         <i className="fa-solid fa-download text-lg cursor-pointer hidden  md:block" />
         <i className="fa-solid fa-scissors text-lg cursor-pointer  md:block" />
         <i className="fa-regular fa-bookmark text-lg cursor-pointer hidden md:block" />
