@@ -54,7 +54,7 @@ const Watch: any = () => {
       setUser(userData.user._id); 
       setToken(userData.accessToken);
     }
-  }, []); // Runs only once when the component mounts
+  }, []);
 
 
   // GET COMMENTS
@@ -71,7 +71,6 @@ const Watch: any = () => {
    useEffect(() => {
     const fetchData = async () => {
       try {
-        // Ensure `data` exists before calling these functions
         if (!data?._id) return;
 
         const likedRes = await getLikedVideos(data._id, token);
@@ -84,15 +83,13 @@ const Watch: any = () => {
         console.error('Error fetching data', error);
       }
     };
-    // Only run fetchData if all dependencies are available
     if (user && token && data?._id) {
       fetchData();
     }
-  }, [user, token, data]); // Depend on user, token, and data
+  }, [user, token, data]); 
 
   useEffect(() => {
     if (data && counter==1) {       
-      // setVideoFile(data.videoFile);
       setVideoId(data._id);
       setCounter(counter+1);
     }
@@ -103,8 +100,8 @@ const Watch: any = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const res = await allVideos(); // Await the result of allVideos()
-        SetvideoData(res); // Only set the data after fetching
+        const res = await allVideos(); 
+        SetvideoData(res); 
       } catch (error) {
         console.error('Error fetching videos', error);
       } finally {
@@ -112,8 +109,8 @@ const Watch: any = () => {
       }
     };
     
-    fetchData(); // Call the fetchData function inside useEffect
-  }, []); // Empty dependency array to run only once
+    fetchData();
+  }, []);
 
 
 
@@ -210,7 +207,6 @@ const Watch: any = () => {
           toast.error('Failed to delte comment')
         }
         
-        // getIndividualVideoComments(videoId, user.token).then((res:any) => setComments(res.data));
       });
     }
   };
@@ -223,7 +219,7 @@ const Watch: any = () => {
   }
 
   const userLoggedInOrNot = () => {
-    return !!token; // Returns true if token exists and is not falsy
+    return !!token;
   };
 
   // HANDLE DIALOG FOR SAVE VIDEO
@@ -239,7 +235,6 @@ const Watch: any = () => {
   const handleContentChange = (e: ChangeEvent<HTMLInputElement>, commentId: string) => {
     const newValue = e.target.value;
   
-    // Example of how you might update the comment based on the commentId
     setComments(prevComments =>
       prevComments.map((comment:any) =>
         comment.id === commentId
@@ -419,7 +414,7 @@ const Watch: any = () => {
             {/* Thumbnail Image */}
             <img
               className="w-48 h-32 object-cover rounded-lg"
-              src={video.thumbnail} // Assume the API provides a `thumbnailUrl` field
+              src={video.thumbnail} 
               alt="Thumbnail"
             />
             {/* Live Badge */}
@@ -432,13 +427,13 @@ const Watch: any = () => {
           <div className="p-4">
             {/* Video Title */}
             <h3 className="text-md font-semibold text-gray-900 leading-tight">
-              {video.title} {/* Assuming your API returns a `title` field */}
+              {video.title}
             </h3>
             {/* Channel Name */}
             <p className="text-sm text-gray-600">{video.ownerInfo.username}</p>
             {/* View Count and Time */}
             <p className="text-xs text-gray-500">
-              {video.views} {video.views<=1? 'view' : 'views'} • {dateAgo(video.createdAt)} {/* Adjust these fields according to your API */}
+              {video.views} {video.views<=1? 'view' : 'views'} • {dateAgo(video.createdAt)}
             </p>
           </div>
         </div>

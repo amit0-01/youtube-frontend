@@ -3,7 +3,6 @@ import { signUp } from '../Service/YoutubeService';
 import { useNavigate } from 'react-router-dom';
 
 const SignUpForm = () => {
-  // Define state variables for each input field
   const [token, setToken]= useState<any | null>('');
   const naviagate = useNavigate()
 
@@ -23,14 +22,13 @@ const SignUpForm = () => {
     coverImage: null,
   });
 
-  // Handle changes to the input fields
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, files } = e.target;
 
     if (name === 'avatar' || name === 'coverImage') {
       setFormData({
         ...formData,
-        [name]: files?.[0] || null, // Save the file object
+        [name]: files?.[0] || null,
       });
     } else {
       setFormData({
@@ -50,7 +48,6 @@ const SignUpForm = () => {
         }
         
     })
-    // Log the form data (you can send it to your backend here)
   };
 
   return (

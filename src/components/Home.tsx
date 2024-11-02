@@ -29,7 +29,6 @@ function Home() {
         setLoading(true);
         const data = await allVideos(searchTerm);                
         setVideos(data); 
-        // console.log(videos);
         
       } catch (error) {
         console.error('Error fetching videos:', error);

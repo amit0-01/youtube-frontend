@@ -13,10 +13,7 @@ function VideoUploadForm({ toggleForm,setLoading }: VideoUploadFormProps) {
     const userData = localStorage.getItem('userInfo');
     if (userData) {
       try {
-        // Parse the stored userData
         const parsedData = JSON.parse(userData);
-
-        // Set the token and userId from parsedData
         if (parsedData.accessToken) {
           setToken(parsedData.accessToken);          
         }
@@ -38,7 +35,7 @@ function VideoUploadForm({ toggleForm,setLoading }: VideoUploadFormProps) {
     videoFile: null as File | null,
     thumbnail: null as File | null,
     description: '',
-    duration: '' // Added duration field
+    duration: '' 
   });
 
   // Handle change events for form inputs
@@ -46,7 +43,6 @@ function VideoUploadForm({ toggleForm,setLoading }: VideoUploadFormProps) {
     const { name, value, files } = e.target as any;
 
     if (name === 'videoFile' || name === 'thumbnail') {
-      // Handle file input
       if (files) {
         const file = files[0];
         setFormValues(prev => ({ ...prev, [name]: file }));
@@ -55,7 +51,6 @@ function VideoUploadForm({ toggleForm,setLoading }: VideoUploadFormProps) {
         }
       }
     } else {
-      // Handle text input
       setFormValues(prev => ({ ...prev, [name]: value }));
     }
   };
@@ -67,8 +62,8 @@ function VideoUploadForm({ toggleForm,setLoading }: VideoUploadFormProps) {
 
     videoElement.addEventListener('loadedmetadata', () => {      
       const duration = videoElement.duration;
-      setFormValues(prev => ({ ...prev, duration: duration.toFixed(2) })); // Set duration with 2 decimal places
-      URL.revokeObjectURL(objectURL); // Clean up URL object
+      setFormValues(prev => ({ ...prev, duration: duration.toFixed(2) })); 
+      URL.revokeObjectURL(objectURL); 
     });
 
     videoElement.src = objectURL;
@@ -85,7 +80,7 @@ function VideoUploadForm({ toggleForm,setLoading }: VideoUploadFormProps) {
       }
     }).catch((error) => {
       console.error('Error uploading video:', error);
-      setLoading(false); // Ensure loading is reset on error as well
+      setLoading(false); 
     });
 
     toggleForm();

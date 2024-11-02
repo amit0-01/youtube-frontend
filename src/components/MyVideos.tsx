@@ -44,9 +44,9 @@ function MyVideos() {
               setVideos(res.data);
             } catch (error) {
               console.error('Error fetching user videos:', error);
-              setLoading(false); // Ensure loading is set to false if an error occurs
+              setLoading(false);
             } finally {
-              setLoading(false); // Always set loading to false after the operation, regardless of success or error
+              setLoading(false); 
             }
           }
         };
@@ -80,11 +80,12 @@ function MyVideos() {
 
         const handleDelete = (videoId:string) => {            
             deleteUserVideo(token, videoId, userId).then((res:any)=>{
+                console.log('res',res);
+                
                 setLoading(true);
                 setVideos(res.data);
                 setLoading(false);
             })    
-            // Optionally: Add logic here to delete the video from the backend/server.
             
             // Remove the video from the local state
             // const updatedVideos = videos.filter((video) => video._id !== videoId);
@@ -136,24 +137,22 @@ function MyVideos() {
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
         onClick={(e) => {
-          e.stopPropagation(); // Prevents parent div onClick from firing
-          handleClick(e); // Handle menu opening
+          e.stopPropagation();
+          handleClick(e); 
         }}
-        style={{ outline: 'none' }} // Removes outline when focused
+        style={{ outline: 'none' }} 
       ></i>
 
-        {/* Material UI Menu */}
         <Menu
           id="basic-menu"
           anchorEl={anchorEl}
           open={open}
-          onClose={handleClose} // Close when clicking outside
+          onClose={handleClose} 
           MenuListProps={{
             'aria-labelledby': 'basic-button',
           }}
           onClick={(e) => e.stopPropagation()}
         >
-          {/* Delete Menu Item with onClick */}
           <MenuItem
             onClick={(e) => { 
               e.preventDefault();

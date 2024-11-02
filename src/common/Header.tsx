@@ -19,7 +19,7 @@
     const user = localStorage.getItem('userInfo');
     if (user) {
       const parseData = JSON.parse(user);
-      setToken(parseData.accessToken); // Set token if it exists
+      setToken(parseData.accessToken); 
     }
   },[]);
 

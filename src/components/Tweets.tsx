@@ -47,7 +47,7 @@ function Tweets() {
     try {
       const response = await toggleTweetLikeDisLike(tweetId, token);
       toast.success(response.message);
-      fetchAllTweets(); // Refresh tweets after toggling like/dislike
+      fetchAllTweets();
     } catch (error) {
       console.error("Error toggling like/dislike:", error);
     }
@@ -69,8 +69,8 @@ function Tweets() {
       const response = await postTweet(tweetContent, token);
       console.log(response);
       toast.success("Tweet posted successfully!");
-      setTweetContent(""); // Clear input after posting
-      fetchAllTweets(); // Refresh tweets after posting
+      setTweetContent("");
+      fetchAllTweets(); 
     } catch (error) {
       console.error("Error posting tweet:", error);
       toast.error("Failed to post tweet");
@@ -112,10 +112,10 @@ function Tweets() {
                     <div>
                         {tweets?.length > 0 ? (
                             tweets.map((tweet: any) => (
-                                <div key={tweet.id} className="bg-gray-800 p-4 rounded-lg shadow-md mb-4 mt-1">
+                                <div key={tweet.id} className="bg-gray-800 p-4 rounded-lg shadow-md my-4">
                                     <div className="flex items-center">
                                         <img
-                                            src={tweet.owner?.coverImage || 'defaultImageURL'} // Use a default image if coverImage is not available
+                                            src={tweet.owner?.coverImage || 'defaultImageURL'} 
                                             alt="User"
                                             className="w-10 h-10 rounded-full"
                                         />

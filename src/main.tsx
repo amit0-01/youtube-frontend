@@ -17,11 +17,8 @@ createRoot(document.getElementById('root')!).render(
     <Route path="sign-in" element={<SignIn />} />
     </Routes>
       <Routes>
-        {/* The App component serves as the layout */}
         <Route path="/" element={<App />}>
-          {/* Redirect from the root path to /home */}
           <Route path="/" element={<Navigate to="/home" replace />} />
-          
           <Route path="home" element={<Home />} />
           <Route path="watch" element={<Watch />} />
           <Route path="playlist" element={<Playlist />} />

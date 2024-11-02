@@ -26,7 +26,7 @@ function MyContent() {
       setUsername(userData.user.username);
       setName(userData.user.fullname)
     }
-  }, []); // Empty dependency array to run this effect only once on component mount
+  }, []); 
 
  
 
@@ -55,9 +55,14 @@ function MyContent() {
 
   {/* Content */}
   <div className="absolute bottom-0 bg-gray-800 w-full  flex space-x-6">
-    <div>
-      <img src={avatar} alt="" className='rounded-full w-20 h-20 flex items-center justify-center text-4xl font-bold' />
-    </div>
+  <div className=" inline-block">
+  <img
+    src={avatar}
+    alt=""
+    className="rounded-full w-20 h-20 flex items-center justify-center text-4xl font-bold"
+  />
+  <i className="fa-solid fa-pen-to-square absolute top-0 right-0 bg-white p-1 rounded-full text-gray-600" />
+</div>
     <div className="ml-5 p-3">
       <h2 className="text-2xl font-bold text-white">{name}</h2>
       <p className=" text-white">{userName}</p>
@@ -73,9 +78,8 @@ function MyContent() {
         </Tabs>
       </Box>
 
-      {/* Conditional rendering based on the tab index */}
-      {value === 0 && <MyVideos />} {/* Render MyContent if the first tab is selected */}
-      {value === 1 && <MyTweets />}  {/* Render MyTweets if the second tab is selected */}
+      {value === 0 && <MyVideos />}
+      {value === 1 && <MyTweets />} 
       {/* <CustomTabPanel value={value} index={0}>
         Item One
       </CustomTabPanel>

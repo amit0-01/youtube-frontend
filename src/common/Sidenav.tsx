@@ -35,7 +35,6 @@ function Sidenav({ isSidenavOpen, toggleSidenav }: SidenavProps) {
                 Home
               </a>
             </li>
-            {/* Example for another route, uncomment and use as needed */}
             {/* <li className="py-2">
               <a
                 href="/playlist"
