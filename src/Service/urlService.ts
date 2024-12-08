@@ -12,5 +12,8 @@ export const urlRoutes ={
     postTweet: 'api/v1/tweets',
 
     // Tweet 
-    Tweet: 'api/v1/tweets/user'
+    Tweet: 'api/v1/tweets/user',
+
+    // CHAT IWTH AI
+    aiChat: 'api/v1/chatBot/chat'
 }

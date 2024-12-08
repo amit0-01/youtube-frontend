@@ -6,6 +6,7 @@ import { Outlet } from 'react-router-dom';
 import VideoUploadForm from './components/Dialog/upload-video'
 import Loader from './components/Loader';
 import { ToastContainer } from 'react-toastify';
+import Chatbox from './components/chatbox';
 
 function App() {
   const [loading, setLoading] = useState<boolean>(false);
@@ -45,6 +46,7 @@ function App() {
         </>
       )}
           <ToastContainer />
+          <Chatbox />
     </div>
   );
 }

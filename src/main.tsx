@@ -10,6 +10,7 @@ import SignIn from './components/SignIn.tsx';
 import SignUpForm from './components/SignUp.tsx';
 import Tweets from './components/Tweets.tsx';
 import MyContent from './components/MyContent.tsx';
+import UpdateProfile from './components/UpdateProfile.tsx';
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
@@ -25,6 +26,7 @@ createRoot(document.getElementById('root')!).render(
           <Route path="sign-up" element={<SignUpForm />} />
           <Route path='my-content' element={<MyContent/>} />
           <Route path='tweets' element={<Tweets/>}/>
+          <Route path='update-profile' element={<UpdateProfile/>}/>
         </Route>
       </Routes>
     </BrowserRouter>
