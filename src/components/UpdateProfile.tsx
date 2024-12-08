@@ -132,6 +132,8 @@ function UpdateProfile() {
     const formData = new FormData();
     formData.append('coverImage', updateFormData.coverImage);
     const response = await changeCoverImage(formData, token);
+    console.log('response',response);
+    
     setLoading(false);
     }
 

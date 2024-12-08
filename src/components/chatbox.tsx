@@ -5,7 +5,7 @@ const Chatbox = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<any>([]);
   const [input, setInput] = useState("");
-  const [isTyping, setIsTyping] = useState(false);
+  // const [isTyping, setIsTyping] = useState(false);
 
   const toggleChatbox = () => setIsOpen((prev) => !prev);
 
@@ -17,7 +17,7 @@ const Chatbox = () => {
     setInput("");
 
     // Simulate AI response
-    setIsTyping(true);
+    // setIsTyping(true);
     const aiResponse = await mockAIResponse(input);
 
     simulateTypingEffect(aiResponse);
@@ -43,7 +43,7 @@ const Chatbox = () => {
         index++;
       } else {
         clearInterval(interval);
-        setIsTyping(false);
+        // setIsTyping(false);
       }
     }, 50); // Adjust speed of typing effect
   };
