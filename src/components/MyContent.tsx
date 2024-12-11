@@ -29,7 +29,9 @@ function MyContent() {
 
 
    useEffect(() => {
+    if(token){
     getUserData();        
+    }
   }, []); 
 
 
