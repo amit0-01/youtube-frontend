@@ -1,3 +1,5 @@
+import { ReactNode } from "react";
+
 export interface HeaderProps {
   toggleSidenav: () => void;
   isSidenavOpen: boolean;
@@ -33,4 +35,14 @@ export interface WarningDialogProps {
   content: string;
   onConfirm: () => void;
   onCancel: () => void;
+}
+
+export interface ChatProviderProps {
+  children: ReactNode;
+}
+
+// Define the type for the chat context
+export interface ChatContextType {
+  chatHistory: string[];
+  setChatHistory: React.Dispatch<React.SetStateAction<string[]>>;
 }
