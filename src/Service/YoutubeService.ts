@@ -20,12 +20,13 @@ export async function allVideos(text?: string) {
   const data = await response.json();
   return data.data;
 }
-
 export async function uploadVideo(
   formValues: { title: string, videoFile: File | null, thumbnail: File | null, description: string, duration: any },
   token: string,
   userId: string
 ) {
+  console.log('formvalue', formValues);
+  
   const url = `${apiUrl}/${urlRoutes.uploadVideo}`;
 
   // Create a FormData object
@@ -42,6 +43,13 @@ export async function uploadVideo(
   if (formValues.thumbnail) {
     formData.append('thumbnail', formValues.thumbnail);
   }
+
+  // Calculate the payload size
+  const payloadBlob = new Blob(Array.from(formData.entries()).map(([key, value]) => {
+    return `${key}: ${value}`;
+  }), { type: "multipart/form-data" });
+
+  console.log(`Payload size: ${payloadBlob.size} bytes`);
 
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
@@ -82,6 +90,7 @@ export async function uploadVideo(
     xhr.send(formData);
   });
 }
+
 
 
 

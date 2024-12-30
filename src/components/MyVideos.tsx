@@ -34,23 +34,26 @@ function MyVideos() {
 
 
       // FETCH VIDEOS
+      const fetchUserVideos = async () => {
+        if (userId && token) {
+          setLoading(true);
+          try {
+            const res = await getUserVideos(userId, token);
+            setVideos(res.data);
+            // console.log('res.data',res.data);
+            
+            console.log('videos',videos)
+          } catch (error) {
+            console.error('Error fetching user videos:', error);
+            setLoading(false);
+          } finally {
+            setLoading(false); 
+          }
+        }
+      };
+    
 
       useEffect(() => {
-        const fetchUserVideos = async () => {
-          if (userId && token) {
-            setLoading(true);
-            try {
-              const res = await getUserVideos(userId, token);
-              setVideos(res.data);
-            } catch (error) {
-              console.error('Error fetching user videos:', error);
-              setLoading(false);
-            } finally {
-              setLoading(false); 
-            }
-          }
-        };
-      
         fetchUserVideos();
       }, [userId, token]);
 
@@ -83,7 +86,8 @@ function MyVideos() {
                 console.log('res',res);
                 
                 setLoading(true);
-                setVideos(res.data);
+                fetchUserVideos();
+                // setVideos(res.data);
                 setLoading(false);
             })    
             

@@ -81,7 +81,7 @@ function Home() {
                 />
                 <div className="ms-3">
                   {/* Title */}
-                  <h1 className="text-lg font-bold">{data.title}</h1>
+                  <h1 className="text-lg font-bold overflow-hidden text-ellipsis whitespace-nowrap">{data.title}</h1>
                   {/* Owner */}
                   <p className="text-gray-500">{data.ownerInfo.username}</p>
                   <div className="flex">

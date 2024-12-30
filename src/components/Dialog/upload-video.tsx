@@ -89,7 +89,7 @@ function VideoUploadForm({ toggleForm,setLoading }: VideoUploadFormProps) {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div className="bg-white p-8 rounded-lg shadow-lg w-96">
-        <h2 className="text-xl font-bold mb-4">Upload Video</h2>
+        <h2 className="text-xl font-bold mb-4 text-gray-700">Upload Video</h2>
         <form onSubmit={handleSubmit}>
           <input
             type="text"
@@ -99,14 +99,14 @@ function VideoUploadForm({ toggleForm,setLoading }: VideoUploadFormProps) {
             placeholder="Video Title"
             className="w-full p-2 mb-4 border border-gray-300 rounded"
           />
-          <p className='mb-2'>Upload Video</p>
+          <p className='mb-2  text-gray-700'>Upload Video</p>
           <input
             type="file"
             name="videoFile"
             onChange={handleChange}
             className="w-full mb-4"
           />
-          <p className='mb-2'>Upload Thumbnail</p>
+          <p className='mb-2 text-gray-700'>Upload Thumbnail</p>
           <input
             type="file"
             name="thumbnail"

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { chatwithAi } from "../Service/chatService";
 import { useChat } from "../Context/ChatProvider";
 
@@ -88,7 +88,7 @@ const Chatbox = () => {
               key={index}
               className={`mb-2 p-2 rounded ${
                 message.sender === "user"
-                  ? "bg-gray-200 text-right"
+                  ? "bg-gray-500 text-right"
                   : "bg-gray-900 text-white"
               }`}
             >
@@ -103,7 +103,7 @@ const Chatbox = () => {
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            className="flex-1 border rounded px-2 py-1"
+            className="flex-1 border rounded px-2 py-1 text-black"
             placeholder="Type your message..."
           />
           <i

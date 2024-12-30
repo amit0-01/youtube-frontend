@@ -104,9 +104,9 @@ function MyTweets() {
     <div>
       {tweets?.length > 0 ? (
         tweets.map((tweet: any) => (
-          <div key={tweet._id} className=" bg-gray-800 p-3  w-full mt-4">
+          <div key={tweet._id} className=" p-3  border rounded    w-full mt-4">
             <div className="flex  justify-between">
-              <h2 className="text-white font-bold">{tweet.owner?.username || 'Unknown User'}</h2>
+              <h2 className=" font-bold">{tweet.owner?.username || 'Unknown User'}</h2>
               <div>
                 {editTweetId !== tweet._id ? (
                   <>
@@ -140,9 +140,9 @@ function MyTweets() {
                 )}
               </div>
             </div>
-            <p className="text-gray-400 text-sm">{dateAgo(tweet.createdAt)}</p>
+            <p className=" text-sm">{dateAgo(tweet.createdAt)}</p>
             {editTweetId !== tweet._id ? (
-              <p className="text-gray-200 mt-2">{tweet.content}</p>
+              <p className=" mt-2">{tweet.content}</p>
             ) : (
               <Input
                 value={tweet.content}

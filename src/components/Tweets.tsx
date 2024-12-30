@@ -112,7 +112,7 @@ function Tweets() {
                     <div>
                         {tweets?.length > 0 ? (
                             tweets.map((tweet: any) => (
-                                <div key={tweet.id} className="bg-gray-800 p-4 rounded-lg shadow-md my-4">
+                                <div key={tweet.id} className="border p-4 rounded-lg  my-4">
                                     <div className="flex items-center">
                                         <img
                                             src={tweet.owner?.coverImage || 'defaultImageURL'} 
@@ -120,11 +120,11 @@ function Tweets() {
                                             className="w-10 h-10 rounded-full"
                                         />
                                         <div className="ml-3">
-                                            <h2 className="text-white font-bold">{tweet.owner?.username || 'Unknown User'}</h2>
+                                            <h2 className=" font-bold">{tweet.owner?.username || 'Unknown User'}</h2>
                                             <p className="text-gray-400 text-sm">{dateAgo(tweet.createdAt)}</p>
                                         </div>
                                     </div>
-                                    <p className="text-gray-200 mt-2">{tweet.content}</p>
+                                    <p className=" mt-2">{tweet.content}</p>
                                     <div className="flex justify-between items-center mt-2 text-gray-400">
                                         <div className="flex items-center">
                                         <Tooltip title={token ? "Like Tweet" : "Login to Like Tweet"} arrow>

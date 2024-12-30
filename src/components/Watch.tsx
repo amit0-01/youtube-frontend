@@ -2,7 +2,7 @@ import { useEffect, useState, ChangeEvent } from 'react';
 import {useLocation } from 'react-router-dom';
 import { getLikedVideos, getIndividualVideoComments, addComment, likeComment, toogleLike, toogleSubscription, getSubscribedChannel, editComment, deleteComment, allVideos } from '../Service/YoutubeService'; 
 // import AddToPlaylistDialog from './AddToPlaylistDialog'; // import your AddToPlaylistDialog component
-import { Button, TextField, Dialog } from '@mui/material'; // MUI components for the dialog
+import { Button, Dialog, Input } from '@mui/material'; // MUI components for the dialog
 import AddToPlaylistDialog from './Dialog/AddToPlaylistDialog';
 import Loader from './Loader';
 import { toast } from 'react-toastify';
@@ -324,14 +324,24 @@ const Watch: any = () => {
       </div>
     </div>
               <div className="flex gap-1 mt-4">
-                <TextField
-                  value={commentContent}
-                  onChange={(e: ChangeEvent<HTMLInputElement>) => setCommentContent(e.target.value)}
-                  placeholder="Add a comment"
-                  fullWidth
-                  sx={{ height: "40px", "& .MuiInputBase-root": { height: "100%" } }}
-                />
-                <div >
+              <Input
+            value={commentContent}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setCommentContent(e.target.value)}
+            placeholder="Add a comment"
+            fullWidth
+            sx={{
+              height: "40px",
+              "& .MuiInputBase-root": { height: "100%" },
+              backgroundColor: "rgba(255, 255, 255, 0.1)", // Dark mode background color
+              color: "gray", // Text color in dark mode
+              "&::placeholder": {
+                color: "rgba(255, 255, 255, 0.5)", // Lighter placeholder color for dark mode
+              },
+              borderRadius: "4px", // Optional: add border radius for smoother edges
+            }}
+          />
+
+                          <div >
                 <Button variant="contained" color="primary" onClick={handleAddComment}>
                   Comment
                 </Button>
@@ -339,7 +349,7 @@ const Watch: any = () => {
                 </div>
                 <div id="comments-container" className="mt-4 space-y-4">
                   {comments.map((comment) => (
-                    <div key={comment._id} className="comment bg-gray-50 p-4 rounded shadow">
+                    <div key={comment._id} className="comment border p-4 rounded shadow">
                       <div className="username font-bold mb-2">{comment.owner.username}</div>
                       <div className="flex justify-between">
                         {editingCommentId !== comment._id ? (
@@ -407,7 +417,7 @@ const Watch: any = () => {
       {videoData.map((video:any, index:any) => (
         <div
           key={index}
-          className="flex w-full bg-white rounded-lg overflow-hidden cursor-pointer h-36"
+          className="flex w-full rounded-lg overflow-hidden cursor-pointer h-36"
           onClick={()=>handleVideoUrl(video)}
         >
           <div className="relative">
@@ -426,11 +436,11 @@ const Watch: any = () => {
           </div>
           <div className="p-4">
             {/* Video Title */}
-            <h3 className="text-md font-semibold text-gray-900 leading-tight">
+            <h3 className="text-md font-semibold leading-tight">
               {video.title}
             </h3>
             {/* Channel Name */}
-            <p className="text-sm text-gray-600">{video.ownerInfo.username}</p>
+            <p className="text-sm  text-gray-500">{video.ownerInfo.username}</p>
             {/* View Count and Time */}
             <p className="text-xs text-gray-500">
               {video.views} {video.views<=1? 'view' : 'views'} • {dateAgo(video.createdAt)}
