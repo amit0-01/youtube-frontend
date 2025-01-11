@@ -63,8 +63,9 @@ const Chatbox = () => {
   };
 
   return (
-    <div className="fixed bottom-4 z-50 right-4 left-4 md:left-auto">
-      {/* Chatbox */}
+    <>
+<div className={`fixed bottom-20 z-50 right-4 left-4 md:left-auto ${!isOpen ? 'hidden' : ''}`}>
+{/* Chatbox */}
       <div
         className={`w-72 bg-white shadow-lg border rounded-lg overflow-hidden transition-transform duration-300 ${
           isOpen ? "transform scale-100" : "transform scale-0"
@@ -115,13 +116,17 @@ const Chatbox = () => {
       </div>
 
       {/* Toggle Button */}
-      <button
-        onClick={toggleChatbox}
-        className="bg-gray-900 text-white rounded-full w-12 h-12 shadow-lg focus:outline-none"
-      >
-        💬
-      </button>
+   
     </div>
+    <div className="fixed bottom-4 z-50 right-4 left-4 md:left-auto">
+       <button
+       onClick={toggleChatbox}
+       className="bg-gray-900 text-white rounded-full w-12 h-12 shadow-lg focus:outline-none"
+     >
+       💬
+     </button>
+     </div>
+     </>
   );
 };
 
