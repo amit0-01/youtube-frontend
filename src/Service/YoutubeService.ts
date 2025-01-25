@@ -1,3 +1,4 @@
+import { toast } from 'react-toastify';
 import {apiUrl} from '../../constant'
 import { urlRoutes } from './urlService';
 import axios from 'axios';
@@ -48,8 +49,7 @@ export async function uploadVideo(
   const payloadBlob = new Blob(Array.from(formData.entries()).map(([key, value]) => {
     return `${key}: ${value}`;
   }), { type: "multipart/form-data" });
-
-  console.log(`Payload size: ${payloadBlob.size} bytes`);
+  toast.info(`Payload size: ${payloadBlob.size} bytes`)
 
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
@@ -64,7 +64,7 @@ export async function uploadVideo(
     xhr.upload.onprogress = function (event) {
       if (event.lengthComputable) {
         const percentComplete = (event.loaded / event.total) * 100;
-        console.log(`Upload progress: ${percentComplete.toFixed(2)}%`);
+        toast.info(`Upload progress: ${percentComplete.toFixed(2)}%`);
         // You can now update the progress bar here
       }
     };
@@ -72,17 +72,14 @@ export async function uploadVideo(
     // Listen for the request to complete
     xhr.onload = function () {
       if (xhr.status === 200) {
-        console.log('Upload successful:', xhr.responseText);
         resolve(JSON.parse(xhr.responseText));
       } else {
-        console.error('Upload error:', xhr.status, xhr.responseText);
         reject(new Error(`Failed to upload video: ${xhr.statusText}`));
       }
     };
 
     // Handle errors
     xhr.onerror = function () {
-      console.error('Error in uploadVideo function:', xhr.statusText);
       reject(new Error('Network error'));
     };
 
@@ -206,7 +203,6 @@ export const signIn = async (formValues:any) => {
     const response = await axios.post(url, formValues);    
     return response.data; // Return the response data
   } catch (error) {
-    console.error('Error during sign-in:', error);
     throw error; // Rethrow the error to handle it in the component if needed
   }
 };
@@ -237,7 +233,6 @@ export const signUp = async (formValues: any, token: any) => {
     return response.data;
   } catch (error) {
     // Handle errors here (e.g., log error, throw error to be handled by calling function)
-    console.error('Error during sign-up:', error);
     throw error;
   }
 };
@@ -248,6 +243,6 @@ export const increaseViewCount = async(token: string,videoId: string)=>{
   const res = await axios.post(url,{},getAuthHeaders(token));
   return res.data
  } catch (error) {
-  console.log(error)
+  toast.error('Failed to increase view count')
  }
 }

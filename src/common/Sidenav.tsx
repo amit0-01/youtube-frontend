@@ -13,10 +13,8 @@ function Sidenav({ isSidenavOpen, toggleSidenav }: SidenavProps) {
     
     // If parsedData exists, set dark mode accordingly
     if (parsedData && JSON.parse(parsedData) === true) {
-      console.log('this is workin')
       setIsDarkMode(true);
     } else if(parsedData && JSON.parse(parsedData) === false) {
-      console.log('this is working')
       setIsDarkMode(false);
     }
   }
@@ -49,7 +47,6 @@ function Sidenav({ isSidenavOpen, toggleSidenav }: SidenavProps) {
 
   // Toggle dark mode
   const toggleDarkMode = () => {
-    console.log(isDarkMode)
     setIsDarkMode((prev) => {
       const newDarkMode = !prev;  // This gives the updated value of isDarkMode
       localStorage.setItem('isDarkMode', JSON.stringify(newDarkMode));  // Save the updated value to localStorage

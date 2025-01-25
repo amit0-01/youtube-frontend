@@ -20,8 +20,8 @@ function Tweets() {
       setLoading(true);
       const allTweets = await getAllTweets();
       setTweets(allTweets.statusCode.data.tweets);
-    } catch (error) {
-      console.error("Error fetching tweets:", error);
+    } catch (error:any) {
+      toast.error("Error fetching tweets:", error);
     } finally {
       setLoading(false);
     }
@@ -48,8 +48,8 @@ function Tweets() {
       const response = await toggleTweetLikeDisLike(tweetId, token);
       toast.success(response.message);
       fetchAllTweets();
-    } catch (error) {
-      console.error("Error toggling like/dislike:", error);
+    } catch (error:any) {
+      toast.error("Error toggling like/dislike:", error);
     }
   };
 
@@ -66,13 +66,11 @@ function Tweets() {
     }
 
     try {
-      const response = await postTweet(tweetContent, token);
-      console.log(response);
+      await postTweet(tweetContent, token);
       toast.success("Tweet posted successfully!");
       setTweetContent("");
       fetchAllTweets(); 
     } catch (error) {
-      console.error("Error posting tweet:", error);
       toast.error("Failed to post tweet");
     }
   };
@@ -112,7 +110,7 @@ function Tweets() {
                     <div>
                         {tweets?.length > 0 ? (
                             tweets.map((tweet: any) => (
-                                <div key={tweet.id} className="border p-4 rounded-lg  my-4">
+                                <div key={tweet._id} className="border p-4 rounded-lg  my-4">
                                     <div className="flex items-center">
                                         <img
                                             src={tweet.owner?.coverImage || 'defaultImageURL'} 

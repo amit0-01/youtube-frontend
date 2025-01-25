@@ -1,13 +1,14 @@
 import axios from "axios";
 import { apiUrl } from "../../constant";
+import { toast } from "react-toastify";
 export const getPlaylist = async (token:any, userId:any) => {    
     try {
       const response = await axios.get(`${apiUrl}/api/v1/playlist/user/${userId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       return response.data;
-    } catch (error) {
-      console.error('Error fetching playlist:', error);
+    } catch (error:any) {
+      toast.error('Error fetching playlist:', error);
       throw error;
     }
   };
@@ -20,8 +21,8 @@ export const getPlaylist = async (token:any, userId:any) => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       return response.data;
-    } catch (error) {
-      console.error('Error creating playlist:', error);
+    } catch (error:any) {
+      toast.error('Error creating playlist:', error);
       throw error;
     }
   };
@@ -39,8 +40,8 @@ export const getPlaylist = async (token:any, userId:any) => {
         }
       );
       return response.data;
-    } catch (error) {
-      console.error('Error adding video to playlist:', error);
+    } catch (error:any) {
+      toast.error('Error adding video to playlist:', error);
       throw error;
     }
   };
@@ -56,8 +57,8 @@ export const getPlaylist = async (token:any, userId:any) => {
     }
 );
       return response.data;
-    } catch (error) {
-      console.error('Error removing video from playlist:', error);
+    } catch (error:any) {
+      toast.error('Error removing video from playlist:', error);
       throw error;
     }
   };

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Checkbox, TextField, Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import { getPlaylist, createPlaylist, addVideotoPlaylist, removeVideofromPlaylist } from '../../Service/AddtoPlaylist';
 import Loader from '../Loader';
+import { toast } from 'react-toastify';
 
 interface Playlist {
   _id: string;
@@ -50,8 +51,8 @@ const AddToPlaylistDialog: React.FC<AddToPlaylistDialogProps> = ({ videoId, open
       if (res.success) {
         setUserPlaylist(res.data);
       }
-    } catch (error) {
-      console.error('Error fetching playlist:', error);
+    } catch (error:any) {
+      toast.error('Error fetching playlist:', error);
     } finally{
       setLoading(false);
     }
@@ -66,8 +67,8 @@ const AddToPlaylistDialog: React.FC<AddToPlaylistDialogProps> = ({ videoId, open
         setPlaylistDescription('');
         setShowFormForCreateList(false);
       }
-    } catch (error) {
-      console.error('Error creating playlist:', error);
+    } catch (error:any) {
+      toast.error('Error creating playlist:', error);
     }
   };
 
@@ -91,8 +92,8 @@ const AddToPlaylistDialog: React.FC<AddToPlaylistDialogProps> = ({ videoId, open
           alert(res.message);
         }
       }
-    } catch (error) {
-      console.error('Error updating playlist:', error);
+    } catch (error:any) {
+      toast.error('Error updating playlist:', error);
     }
   };
 

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { chatwithAi } from "../Service/chatService";
 import { useChat } from "../Context/ChatProvider";
 
@@ -6,10 +6,6 @@ const Chatbox = () => {
   const { chatHistory, setChatHistory } = useChat(); // Use context for persistent chat history
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState("");
-
-  useEffect(function(){
-  console.log('chatHistory', chatHistory);
-  },[])
 
   const toggleChatbox = () => setIsOpen((prev) => !prev);
 
@@ -27,7 +23,6 @@ const Chatbox = () => {
       const aiResponse = await getAIResponse(input);
       simulateTypingEffect(aiResponse);
     } catch (error) {
-      console.error("Error fetching AI response:", error);
       simulateTypingEffect("Sorry, I couldn't process that request.");
     }
   };

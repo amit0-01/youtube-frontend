@@ -57,7 +57,6 @@ function UpdateProfile() {
     useEffect(()=>{
         // getToken();
         getUserData();        
-        console.log('updateformdata',updateFormData);    
     },[])
 
     useEffect(()=>{
@@ -132,7 +131,9 @@ function UpdateProfile() {
     const formData = new FormData();
     formData.append('coverImage', updateFormData.coverImage);
     const response = await changeCoverImage(formData, token);
-    console.log('response',response);
+    if(response.success){
+      toast.success(response.message);
+    }
     
     setLoading(false);
     }
@@ -143,8 +144,10 @@ function UpdateProfile() {
       const formData = new FormData();
       formData.append('avatar', updateFormData.avatar);
       const response = await changeUserAvatar(formData, token);
+      if(response.success){
+        toast.success(response.message);
+      }
       setLoading(false);
-      console.log('resone',response);
     }
 
     // UPDATE ACCOUNT
@@ -155,14 +158,11 @@ function UpdateProfile() {
       fullname: updateFormData.fullName
     }
     const response = await updateUserAccountEmailAndFullName(payload,token);
-    console.log('response',response);
+    if(response.success){
+      toast.success(response.message);
+    }
     setLoading(false);
     }
-
-  // useEffect(() => {
-  //   console.log("updateFormData updated:", updateFormData);
-  // }, [updateFormData]);
-
 
  
 

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { VideoUploadFormProps } from '../../interface/interface';
 import { uploadVideo } from '../../Service/YoutubeService';
+import { toast } from 'react-toastify';
 
 function VideoUploadForm({ toggleForm,setLoading }: VideoUploadFormProps) {
   const [token, setToken] = useState('');
@@ -22,11 +23,11 @@ function VideoUploadForm({ toggleForm,setLoading }: VideoUploadFormProps) {
           setUserId(parsedData.user._id);
           
         }
-      } catch (error) {
-        console.error('Error parsing user data from localStorage:', error);
+      } catch (error:any) {
+        toast.error('Error parsing user data from localStorage:', error);
       }
     } else {
-      console.warn('No user data found in localStorage.');
+      toast.warn('No user data found in localStorage.');
     }
   }, []);
   
@@ -79,7 +80,7 @@ function VideoUploadForm({ toggleForm,setLoading }: VideoUploadFormProps) {
         setLoading(false);
       }
     }).catch((error) => {
-      console.error('Error uploading video:', error);
+      toast.error('Error uploading video:', error);
       setLoading(false); 
     });
 

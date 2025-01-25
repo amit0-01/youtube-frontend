@@ -79,8 +79,8 @@ const Watch: any = () => {
 
         const subscribedRes = await getSubscribedChannel(user, token);
         setSubscribedToChannel(subscribedRes.data.length !== 0);
-      } catch (error) {
-        console.error('Error fetching data', error);
+      } catch (error:any) {
+        toast.error('Error fetching data', error);
       }
     };
     if (user && token && data?._id) {
@@ -102,8 +102,8 @@ const Watch: any = () => {
         setLoading(true);
         const res = await allVideos(); 
         SetvideoData(res); 
-      } catch (error) {
-        console.error('Error fetching videos', error);
+      } catch (error:any) {
+        toast.error('Error fetching videos', error);
       } finally {
         setLoading(false);
       }
@@ -130,7 +130,6 @@ const Watch: any = () => {
         }
         
       } catch (error) {
-        console.error('Error adding comment:', error);
         toast.error('Failed to add comment');
       }
     }

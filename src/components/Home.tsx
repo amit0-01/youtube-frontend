@@ -3,6 +3,8 @@ import { allVideos, increaseViewCount } from '../Service/YoutubeService';
 import {  useNavigate, useOutletContext } from 'react-router-dom';
 import { dateAgo } from '../Service/Function';
 import Loader from './Loader';
+import { toast } from 'react-toastify';
+
 
 
 function Home() {
@@ -30,8 +32,8 @@ function Home() {
         const data = await allVideos(searchTerm);                
         setVideos(data); 
         
-      } catch (error) {
-        console.error('Error fetching videos:', error);
+      } catch (error:any) {
+        toast.error('Error fetching videos:', error);
       } finally{
         setLoading(false);
       }

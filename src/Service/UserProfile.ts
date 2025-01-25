@@ -46,9 +46,7 @@ export const changeCoverImage = async(formData:FormData, token:string)=>{
 }
 
 // GET CURRENT USER DATA
-export async function getCurrentUser(token:string){
-  console.log('token',token);
-  
+export async function getCurrentUser(token:string){  
 const url = `${apiUrl}/api/v1/users/current-user`
 const response = await axios.get(url,getAuthHeaders(token));
 return response.data

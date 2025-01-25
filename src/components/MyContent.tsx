@@ -37,9 +37,7 @@ function MyContent() {
 
   async function getUserData(){
     setLoading(true);
-    const response = await getCurrentUser(token);
-    console.log('respnse',response);
-    
+    const response = await getCurrentUser(token);    
     if(response.success){
       setCoverImage(response.data.coverImage);
       setAvatar(response.data.avatar);
@@ -86,7 +84,6 @@ function MyContent() {
   //       }
   //       localStorage.setItem('userInfo',JSON.stringify(updatedUserInfo));
   //     } catch (error) {
-  //       console.log(error);
   //     }
   //   }
   // }

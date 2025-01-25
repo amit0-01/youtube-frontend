@@ -4,6 +4,7 @@ import { deleteTweet, EditTweet, getAllUserTweets } from '../Service/TweetServic
 import {Input, Tooltip } from '@mui/material';
 import WarningDialog from '../common/Warning';
 import Loader from './Loader';
+import { toast } from 'react-toastify';
 function MyTweets() {
 
     const[tweets, setTweets] = useState<any>([]);
@@ -21,7 +22,7 @@ function MyTweets() {
         if (userData && userData.user) {
           setUser(userData);
         } else {
-          console.log('No user data found in localStorage');
+          toast.error('No user data found in localStorage')
         }
       }, []);
 
@@ -69,12 +70,13 @@ function MyTweets() {
   
     if (tweetToEdit) {
       const response = await EditTweet(tweetId, tweetToEdit.content, user.accessToken);
-      console.log(response);
-      
-      getUserTweets(); 
-      setEditTweetId(null);
+       if(response.success){
+        toast.success(response.message);
+        getUserTweets();
+        setEditTweetId(null);
+       }
     } else {
-      console.error('Tweet not found');
+      toast.error('Tweet not found');
     }
   };
 

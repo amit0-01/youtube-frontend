@@ -4,6 +4,7 @@ import { convertoMinute } from '../Service/Function';
 import { useNavigate } from 'react-router-dom';
 import { deleteUserVideo, getUserVideos } from '../Service/UserProfile';
 import Loader from './Loader';
+import { toast } from 'react-toastify';
 
 function MyVideos() {
 
@@ -39,12 +40,9 @@ function MyVideos() {
           setLoading(true);
           try {
             const res = await getUserVideos(userId, token);
-            setVideos(res.data);
-            // console.log('res.data',res.data);
-            
-            console.log('videos',videos)
-          } catch (error) {
-            console.error('Error fetching user videos:', error);
+            setVideos(res.data);            
+          } catch (error:any) {
+            toast.error('Error fetching user videos:', error);
             setLoading(false);
           } finally {
             setLoading(false); 
@@ -82,13 +80,14 @@ function MyVideos() {
   // delete the video
 
         const handleDelete = (videoId:string) => {            
-            deleteUserVideo(token, videoId, userId).then((res:any)=>{
-                console.log('res',res);
-                
+            deleteUserVideo(token, videoId, userId).then((res:any)=>{       
+               if(res.status === 200) {
+                toast.success('Video deleted successfully');         
                 setLoading(true);
                 fetchUserVideos();
                 // setVideos(res.data);
                 setLoading(false);
+               }
             })    
             
             // Remove the video from the local state
