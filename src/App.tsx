@@ -5,7 +5,6 @@ import Sidenav from './common/Sidenav';
 import { Outlet } from 'react-router-dom';
 import VideoUploadForm from './components/Dialog/upload-video'
 import Loader from './components/Loader';
-import { ToastContainer } from 'react-toastify';
 import Chatbox from './components/chatbox';
 import { setupFetchInterceptor } from './utils/interceptor';
 
@@ -49,7 +48,6 @@ function App() {
           )}
         </>
       )}
-          <ToastContainer />
           <Chatbox />
     </div>
   );

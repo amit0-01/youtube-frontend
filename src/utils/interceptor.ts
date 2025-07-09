@@ -7,8 +7,10 @@ const API_BASE_URL = apiUrl; // Replace with your actual API base URL
 
 export const setupFetchInterceptor = () => {
   const originalFetch = window.fetch;
+  console.log('originalFetch',originalFetch)
 
   window.fetch = async (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
+    console.log('input', input)
     if (!init) init = {};
     if (!init.headers) init.headers = {};
 

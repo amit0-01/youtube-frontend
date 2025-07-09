@@ -58,3 +58,11 @@ const url = `${apiUrl}/api/v1/users/update-account`
 const response = await axios.patch(url,payload,getAuthHeaders(token))
 return response.data;
 }
+
+// CHANGE PASSWORD
+
+export const changePassword = async(payload:any,token:string) =>{
+  const url = `${apiUrl}/api/v1/users/change-password`
+  const response = await axios.post(url,payload,getAuthHeaders(token))
+  return response.data;
+}

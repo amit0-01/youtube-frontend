@@ -3,17 +3,15 @@
   import { useEffect, useState } from "react";
   import { Menu, MenuItem } from "@mui/material";
   import { useLocation } from 'react-router-dom';
+import Loader from "../components/Loader";
 
 
   function Header({ toggleSidenav, isSidenavOpen, toggleForm, setSearchTerm }: HeaderProps) {
     const navigate = useNavigate();
     const [token, setToken] = useState<string | null>(null);
     const [anchorEl, setAnchorEl] = useState(null);
+    const [loading,setLoading] = useState(false);
     const location = useLocation();
-
-
-
-  
 
   useEffect(() => {
     const user = localStorage.getItem('userInfo');
@@ -28,9 +26,15 @@
   };
 
   function logout(){
+    setLoading(true);
     localStorage.clear();
     setToken('');
-    navigate('/sign-in')
+    setTimeout(() => {
+      setLoading(false);
+      navigate('/sign-in')
+    }, 1000);
+ 
+   
   }
 
   
@@ -59,7 +63,7 @@
   // }
 
   return (
-    <header
+    <>{loading ? <Loader/> :  <header
       className={`bg-gray-900 text-white p-4 flex items-center justify-between transition-all duration-300 ease-in-out ${
         isSidenavOpen ? 'lg:ml-64' : 'lg:ml-0'
       }`}
@@ -120,12 +124,14 @@
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
+      <MenuItem onClick={()=> { handleClose(); navigate('change-password')}} >Change Password</MenuItem>
         <MenuItem onClick={logout}>Logout</MenuItem>
       </Menu>
     </div>
         </div>
       )}
-    </header>
+    </header>}</>
+   
   );
 }
 

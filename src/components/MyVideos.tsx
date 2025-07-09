@@ -42,7 +42,8 @@ function MyVideos() {
             const res = await getUserVideos(userId, token);
             setVideos(res.data);            
           } catch (error:any) {
-            toast.error('Error fetching user videos:', error);
+            console.log('errore',error)
+            toast.error(error.response.data.message);
             setLoading(false);
           } finally {
             setLoading(false); 

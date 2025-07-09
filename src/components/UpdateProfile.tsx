@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState, } from 'react'
 import { changeCoverImage, changeUserAvatar, getCurrentUser, updateUserAccountEmailAndFullName } from '../Service/UserProfile';
 import Loader from './Loader';
-import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 function UpdateProfile() {
@@ -9,7 +8,7 @@ function UpdateProfile() {
     const [coverImage, setCoverImage] = useState('');
     const [avatar, setAvatar] = useState('');
     const [fullName, setFullName] = useState('');
-    const [userName, setUserName] = useState('');
+    const [username, setUserName] = useState('');
     const [email,setEmail] = useState('');
     const [token] = useState(() => {
       const userInfoString = localStorage.getItem('userInfo');
@@ -23,7 +22,6 @@ function UpdateProfile() {
     const avatarFileInputRef = useRef<any>(null);
     const  [updateFormData, setUpdateFormData] = useState<any>({});
     const[loading,setLoading] = useState(false);
-    const navigate = useNavigate();
 
     // GET USER DATA
     async function getUserData(){
@@ -49,7 +47,7 @@ function UpdateProfile() {
     function setUserData(){
       setUpdateFormData({
       fullName: fullName,
-      userName: userName,
+      userName: username,
       email: email
      })
     }
@@ -61,7 +59,7 @@ function UpdateProfile() {
 
     useEffect(()=>{
       setUserData();    
-    },[fullName,userName,email])
+    },[fullName,username,email])
 
     // TRIGGER INPUT FOR COVER IMAGE
     function handleCoverImageChange(){
@@ -106,6 +104,7 @@ function UpdateProfile() {
         ...prevState,
         [field]: value,
       }));
+      console.log('updateFormData',updateFormData)
     };
 
 
@@ -119,10 +118,10 @@ function UpdateProfile() {
        updateAvatarImage();
       }
       updateAccount();
-      setTimeout(()=>{
-      navigate('/my-content');
-      },0);
-      toast.success("Updated User Account Successfully")
+      // setTimeout(()=>{
+      // navigate('/my-content');
+      // },0);
+      // toast.success("Updated User Account Successfully")
     }
 
     // UPDATE COVER IMAGE
@@ -155,8 +154,10 @@ function UpdateProfile() {
     setLoading(true);
     const payload = {
       email : updateFormData.email,
-      fullname: updateFormData.fullName
+      fullname: updateFormData.fullName,
+      username : updateFormData.userName
     }
+    console.log('payload',payload)
     const response = await updateUserAccountEmailAndFullName(payload,token);
     if(response.success){
       toast.success(response.message);
@@ -251,10 +252,10 @@ function UpdateProfile() {
               type="text"
               id="username"
               placeholder="Enter username"
-              value={userName}
+              value={username}
               onChange={(e) => {
                 setUserName(e.target.value);
-                handleInputChange("userName", e.target.value);
+                handleInputChange("username", e.target.value);
               }}
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />

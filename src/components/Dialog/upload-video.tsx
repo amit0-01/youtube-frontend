@@ -78,6 +78,7 @@ function VideoUploadForm({ toggleForm,setLoading }: VideoUploadFormProps) {
     uploadVideo(formValues, token, userId).then((res: any) => {
       if (res.success) {
         setLoading(false);
+        toast.success('Uploaded video successfully')
       }
     }).catch((error) => {
       toast.error('Error uploading video:', error);

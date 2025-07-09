@@ -1,14 +1,19 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { FormValues, FormErrors } from '../interface/interface';
 import { signIn } from '../Service/YoutubeService';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
+import Loader from './Loader';
 
 
 const Login: React.FC = () => {
   const [formValues, setFormValues] = useState<FormValues>({ username: '', password: '' });
   const [errors, setErrors] = useState<FormErrors>({});
   const navigate = useNavigate();
+  const location = useLocation();
+  const { message } = location.state || {};
+  const [loading, setLoading] = useState<boolean>(false)
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -17,6 +22,13 @@ const Login: React.FC = () => {
       [name]: value
     });
   };
+
+  useEffect(() => {
+    if ( message) {
+      toast.success(message);
+      navigate('/home', { replace: true, state: null });
+    }
+  }, [ message, navigate]);
 
   const validateForm = () => {
     const newErrors: FormErrors = {};
@@ -30,10 +42,22 @@ const Login: React.FC = () => {
       e.preventDefault();
       const validationErrors:any = validateForm();
       if (Object.keys(validationErrors).length === 0) {
+        setLoading(true);
         const response = await signIn(formValues)
-        localStorage.setItem('userInfo', JSON.stringify(response.data))
-        navigate('/home')
+        console.log('response',response)
+        if(response.success){
+          localStorage.setItem('userInfo', JSON.stringify(response.data));
+          navigate('/home', { state: {message: 'Login successfull' } });
+          setLoading(false);
+        } else{
+          setLoading(false);
+          console.log('error while login');
+          toast.error('INCORRECT EMAIL OR PASSWORD');
+          setErrors(validationErrors);
+        }
       } else {
+        console.log('error while login');
+        toast.error('error while login');
         setErrors(validationErrors);
       }
     } catch (error:any) {
@@ -43,8 +67,7 @@ const Login: React.FC = () => {
 
   return (
     <>
-    <ToastContainer />
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    {loading ? <Loader /> : <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="w-full max-w-sm bg-white p-8 rounded-lg shadow-lg">
         <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
         <form onSubmit={handleSubmit}>
@@ -98,7 +121,8 @@ const Login: React.FC = () => {
           </p>
         </div>
       </div>
-    </div>
+    </div>}
+    
     </>
   );
 };

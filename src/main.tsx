@@ -12,11 +12,14 @@ import Tweets from './components/Tweets.tsx';
 import MyContent from './components/MyContent.tsx';
 import UpdateProfile from './components/UpdateProfile.tsx';
 import { ChatProvider } from './Context/ChatProvider.tsx';
+import ChangePassword from './components/changePassword.tsx';
+import { ToastContainer } from 'react-toastify';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ChatProvider>
       <BrowserRouter>
+        <ToastContainer position="top-right" autoClose={3000} />
         <Routes>
           <Route path="sign-in" element={<SignIn />} />
           <Route path="/" element={<App />}>
@@ -28,6 +31,7 @@ createRoot(document.getElementById('root')!).render(
             <Route path="my-content" element={<MyContent />} />
             <Route path="tweets" element={<Tweets />} />
             <Route path="update-profile" element={<UpdateProfile />} />
+            <Route path="change-password" element={<ChangePassword />} />
           </Route>
         </Routes>
       </BrowserRouter>
