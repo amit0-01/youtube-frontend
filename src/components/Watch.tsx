@@ -9,6 +9,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Tooltip from '@mui/material/Tooltip';
 import { dateAgo } from '../Service/Function';
+import 'youtube-video-element';
 
 
 interface Comment {
@@ -255,10 +256,11 @@ const Watch: any = () => {
         <main className='md:col-span-2'>
           {data.videoFile && (
             <div>
-              <video key={data.videoFile} controls className="w-full md:h-96 h-50">
+              <video key={data.videoFile} controls crossOrigin="anonymous" playsInline className="w-full md:h-96 h-50">
                 <source src={data.videoFile} type="video/mp4" />
                 Your browser does not support the video tag.
               </video>
+              {/* <youtube-video controls src={`https://www.youtube.com/watch?v=${data.videoFile}`}></youtube-video> */}
               {/* <div className="flex justify-between mt-4 gap-3">
                 <div className='flex gap-3'>
                   <Button variant="contained" color="primary" onClick={handleToggleLike}>

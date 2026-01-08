@@ -93,67 +93,142 @@ function MyContent() {
 
 
 
-  return (loading ? (<Loader/>):(
-    token ? 
-    <div className="grid items-center p-3">
-   <div className="relative">
-  {/* Cover Image */}
-  <div
-    className="h-72 bg-cover bg-center"
-    style={{ backgroundImage: `url(${coverImage})` }}
-    ></div>
-
-  {/* Content */}
-  <div className="absolute bottom-0 w-full  flex space-x-6">
-  <div className="relative">
-  <img
-    src={avatar}
-    alt=""
-    className="rounded-full w-20 h-20 flex items-center justify-center text-4xl font-bold"
-  />
-  <i className="fa-solid fa-pen-to-square absolute top-0 right-0 bg-white p-1 rounded-full text-gray-600 cursor-pointer"
-  onClick={handleUpdateProfile}
-  />
-  {/* hidden file input
-  <input
-  type='file'
-  ref={fileInputRef}
-  className='hidden'
-  onChange={handleFileChange}
-  /> */}
-</div>
-    <div className="ml-5 p-3">
-      <h2 className="text-2xl font-bold text-white">{name}</h2>
-      <p className=" text-white">{userName}</p>
-      <p className="mt-1 text-white">5 subscribers · 29 videos</p>
-    </div>
-  </div>
-</div>
-
-<Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs value={value} onChange={handleChange} aria-label="tabs example">
-          <Tab label="My Videos" />
-          <Tab label="My Tweets" />
-        </Tabs>
-      </Box>
-
-      {value === 0 && <MyVideos />}
-      {value === 1 && <MyTweets />} 
-      {/* <CustomTabPanel value={value} index={0}>
-        Item One
-      </CustomTabPanel>
-      <CustomTabPanel value={value} index={1}>
-        Item Two
-      </CustomTabPanel>
-      <CustomTabPanel value={value} index={2}>
-        Item Three
-      </CustomTabPanel> */}
+  return (
+    loading ? (
+      <div className="flex justify-center items-center h-screen">
+        <Loader />
+      </div>
+    ) : (
+      token ? (
+        <div className="">
+          {/* Cover Photo Section */}
+          <div className="relative">
+            <div 
+              className="h-64 w-full bg-cover bg-center rounded-t-lg shadow-lg"
+              style={{ 
+                backgroundImage: `url(${coverImage || 'https://images.unsplash.com/photo-1579547945413-497e1b99dac0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'})`,
+                backgroundColor: '#1e293b'
+              }}
+            >
+              <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 to-transparent"></div>
+            </div>
   
-  </div> :<div className='flex justify-center items-center h-screen'> <div><h1 className=' text-3xl'>You need to Sign In  </h1> <h2 className='mt-5'><b>username </b>: amit12345 </h2> <h2><b>password</b> : 12345</h2>  </div> 
-  </div>
-          
-  )
-)
+            {/* Profile Info Section */}
+            <div className="px-6 md:px-10 relative">
+              <div className="flex flex-col md:flex-row items-start md:items-end gap-6 -mt-16">
+                <div className="relative group">
+                  <img
+                    src={avatar || 'https://avatar.iran.liara.run/public'}
+                    alt="Profile"
+                    className="w-32 h-32 rounded-full border-4 border-white dark:border-gray-800 object-cover shadow-lg"
+                  />
+                  <button 
+                    onClick={handleUpdateProfile}
+                    className="absolute bottom-1 right-1 bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600 transition-all opacity-0 group-hover:opacity-100"
+                  >
+                    <i className="fas fa-camera text-sm"></i>
+                  </button>
+                </div>
+  
+                <div className="flex-1 text-white">
+                  <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+                    <div>
+                      <h1 className="text-2xl md:text-3xl font-bold">{name || 'Your Name'}</h1>
+                      <p className="text-gray-300">@{userName || 'username'}</p>
+                    </div>
+                    <button className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-full font-medium transition-colors shadow-md">
+                      Edit Profile
+                    </button>
+                  </div>
+  
+                  <div className="flex gap-6 mt-4 text-gray-300">
+                    <div className="flex items-center gap-1">
+                      <i className="fas fa-users"></i>
+                      <span>5 subscribers</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <i className="fas fa-video"></i>
+                      <span>29 videos</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+  
+          {/* Tabs Section */}
+          <div className="px-6 md:px-10 mt-6">
+            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+              <Tabs 
+                value={value} 
+                onChange={handleChange} 
+                variant="fullWidth"
+                textColor="secondary"
+                indicatorColor="secondary"
+              >
+                <Tab 
+                  label={
+                    <div className="flex items-center gap-2">
+                      <i className="fas fa-video"></i>
+                      <span>My Videos</span>
+                    </div>
+                  } 
+                  className="text-gray-700 dark:text-gray-300"
+                />
+                <Tab 
+                  label={
+                    <div className="flex items-center gap-2">
+                      <i className="fas fa-comment-dots"></i>
+                      <span>My Tweets</span>
+                    </div>
+                  } 
+                  className="text-gray-700 dark:text-gray-300"
+                />
+              </Tabs>
+            </Box>
+  
+            {/* Tab Content */}
+            <div className="py-6">
+              {value === 0 && <MyVideos />}
+              {value === 1 && <MyTweets />}
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="flex flex-col justify-center items-center h-screen bg-gradient-to-br from-blue-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 p-6">
+          <div className="max-w-md w-full bg-white dark:bg-gray-800 rounded-xl shadow-xl p-8 text-center">
+            <div className="w-20 h-20 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mx-auto mb-6">
+              <i className="fas fa-lock text-3xl text-blue-500 dark:text-blue-400"></i>
+            </div>
+            <h1 className="text-2xl font-bold text-gray-800 dark:text-white mb-4">Sign In Required</h1>
+            <p className="text-gray-600 dark:text-gray-300 mb-6">Please sign in to view your profile</p>
+            
+            <div className="bg-blue-50 dark:bg-gray-700 rounded-lg p-4 mb-6">
+              <h3 className="font-medium text-gray-800 dark:text-gray-200 mb-2">Demo Credentials</h3>
+              <div className="space-y-2 text-left">
+                <div className="flex items-center gap-2">
+                  <i className="fas fa-user text-gray-500"></i>
+                  <span className="text-gray-700 dark:text-gray-300">Username: <span className="font-mono">amit12345</span></span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <i className="fas fa-key text-gray-500"></i>
+                  <span className="text-gray-700 dark:text-gray-300">Password: <span className="font-mono">12345</span></span>
+                </div>
+              </div>
+            </div>
+            
+            <button 
+              onClick={() => navigate('/login')} 
+              className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg font-medium transition-colors"
+            >
+              Go to Login Page
+            </button>
+          </div>
+        </div>
+      )
+    )
+  );
+  
 }
 
 
