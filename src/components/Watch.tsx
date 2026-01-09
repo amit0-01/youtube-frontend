@@ -58,7 +58,7 @@ const Watch: any = () => {
   }, []);
 
 
-  // GET COMMENTS
+  // GET COMMENTS 
 
   const getComments = async()=>{
     const commentsRes = await getIndividualVideoComments(data._id, token);

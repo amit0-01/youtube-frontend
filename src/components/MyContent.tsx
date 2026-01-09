@@ -100,7 +100,7 @@ function MyContent() {
       </div>
     ) : (
       token ? (
-        <div className="">
+        <div className="max-w-6xl mx-auto">
           {/* Cover Photo Section */}
           <div className="relative">
             <div 
