@@ -216,6 +216,10 @@ const Watch: any = () => {
     setData(video)
     
   //  setVideoFile(video.videoFile);   
+  window.scrollTo({
+    top : 0,
+    behavior : 'smooth'
+  })
   }
 
   const userLoggedInOrNot = () => {
