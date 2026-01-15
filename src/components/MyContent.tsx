@@ -218,7 +218,7 @@ function MyContent() {
             </div>
             
             <button 
-              onClick={() => navigate('/login')} 
+              onClick={() => navigate('/sign-in')} 
               className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg font-medium transition-colors"
             >
               Go to Login Page
