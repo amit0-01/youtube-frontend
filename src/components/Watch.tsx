@@ -9,7 +9,6 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Tooltip from '@mui/material/Tooltip';
 import { dateAgo } from '../Service/Function';
-import 'youtube-video-element';
 import { Plyr } from "plyr-react";
 import "plyr-react/plyr.css";
 
