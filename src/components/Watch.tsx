@@ -10,6 +10,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import Tooltip from '@mui/material/Tooltip';
 import { dateAgo } from '../Service/Function';
 import 'youtube-video-element';
+import { Plyr } from "plyr-react";
+import "plyr-react/plyr.css";
 
 
 interface Comment {
@@ -260,29 +262,36 @@ const Watch: any = () => {
         <main className='md:col-span-2'>
           {data.videoFile && (
             <div>
-              <video key={data.videoFile} controls crossOrigin="anonymous" playsInline className="w-full md:h-96 h-50">
+              {/* <video key={data.videoFile} controls crossOrigin="anonymous" playsInline className="w-full md:h-96 h-50">
                 <source src={data.videoFile} type="video/mp4" />
                 Your browser does not support the video tag.
-              </video>
-              {/* <youtube-video controls src={`https://www.youtube.com/watch?v=${data.videoFile}`}></youtube-video> */}
-              {/* <div className="flex justify-between mt-4 gap-3">
-                <div className='flex gap-3'>
-                  <Button variant="contained" color="primary" onClick={handleToggleLike}>
-                    {videoIsLiked ? 'Unlike' : 'Like'}
-                  </Button>
-                  <Button variant="contained" color="secondary">
-                    Dislike
-                  </Button>
-                  <Button variant="contained" color="success" onClick={handleToggleSubscription}>
-                    {subscribedToChannel ? 'Unsubscribe' : 'Subscribe'}
-                  </Button>
-                </div>
-                <div>
-                  <Button variant="contained" color="success" onClick={() => setOpenDialog(true)}>
-                    Add to playlist
-                  </Button>
-                </div>
-              </div> */}
+              </video> */}
+              <Plyr
+            source={{
+              type: "video",
+              sources: [
+                {
+                  src: data.videoFile,
+                  type: "video/mp4",
+                },
+              ],
+            }}
+            options={{
+              controls: [
+                "play-large",
+                "play",
+                "progress",
+                "current-time",
+                "mute",
+                "volume",
+                "settings",
+                "fullscreen",
+              ],
+              settings: ["speed", "quality"],
+              speed: { selected: 1, options: [0.5, 1, 1.25, 1.5, 2] },
+            }}
+          />
+      
               <div className='mt-3 font-bold'>{data.title}</div>
                 <div className="flex gap-6 md:justify-between mx-3">
       <div className="flex items-center space-x-2 mt-5">
