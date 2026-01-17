@@ -7,10 +7,10 @@ const API_BASE_URL = apiUrl; // Replace with your actual API base URL
 
 export const setupFetchInterceptor = () => {
   const originalFetch = window.fetch;
-  console.log('originalFetch',originalFetch)
+  
 
   window.fetch = async (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
-    console.log('input', input)
+    
     if (!init) init = {};
     if (!init.headers) init.headers = {};
 
@@ -22,13 +22,13 @@ export const setupFetchInterceptor = () => {
 
     // Make the API call
     let response = await originalFetch(input, init);
-    console.log('response',response)
+    
     // Handle token expiry (401)
     if (response.status === 401) {
       toast.warn('Access token expired. Attempting to refresh...');
 
       const refreshToken = getRefreshToken();
-      console.log('refreshToken',refreshToken)
+      
       if (!refreshToken) {
         throw new Error('No refresh token available. Please log in again.');
       }

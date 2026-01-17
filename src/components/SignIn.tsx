@@ -44,19 +44,19 @@ const Login: React.FC = () => {
       if (Object.keys(validationErrors).length === 0) {
         setLoading(true);
         const response = await signIn(formValues)
-        console.log('response',response)
+        
         if(response.success){
           localStorage.setItem('userInfo', JSON.stringify(response.data));
           navigate('/home', { state: {message: 'Login successfull' } });
           setLoading(false);
         } else{
           setLoading(false);
-          console.log('error while login');
+
           toast.error('INCORRECT EMAIL OR PASSWORD');
           setErrors(validationErrors);
         }
       } else {
-        console.log('error while login');
+
         toast.error('error while login');
         setErrors(validationErrors);
       }

@@ -46,9 +46,9 @@ const ChangePassword = () => {
         newPassword: formData.newPassword,
       };
   
-      console.log("payload", payload);
+
       const response = await changePassword(payload, token);
-      console.log("response", response);
+
   
       if (response.success) {
         toast.success(response.message);
@@ -57,7 +57,7 @@ const ChangePassword = () => {
         navigate("/home");
       }
     } catch (error: any) {
-      console.log("error", error);
+
   
       // Handle specific error for invalid old password
       if (error.response?.data?.message === "Invalid old password") {

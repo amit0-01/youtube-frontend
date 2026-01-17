@@ -26,7 +26,7 @@ export async function uploadVideo(
   token: string,
   userId: string
 ) {
-  console.log('formvalue', formValues);
+
   
   const url = `${apiUrl}/${urlRoutes.uploadVideo}`;
 

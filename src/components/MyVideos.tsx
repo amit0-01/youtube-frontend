@@ -42,7 +42,7 @@ function MyVideos() {
             const res = await getUserVideos(userId, token);
             setVideos(res.data);            
           } catch (error:any) {
-            console.log('errore',error)
+            
             toast.error(error.response.data.message);
             setLoading(false);
           } finally {

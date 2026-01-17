@@ -104,7 +104,7 @@ function UpdateProfile() {
         ...prevState,
         [field]: value,
       }));
-      console.log('updateFormData',updateFormData)
+      
     };
 
 
@@ -157,7 +157,7 @@ function UpdateProfile() {
       fullname: updateFormData.fullName,
       username : updateFormData.userName
     }
-    console.log('payload',payload)
+    
     const response = await updateUserAccountEmailAndFullName(payload,token);
     if(response.success){
       toast.success(response.message);
