@@ -20,7 +20,7 @@ export const getAuthToken = (): string | null => {
     return null; // Token has expired
   }
 
-  return accessToken; // Return valid token
+  return accessToken; 
 };
 
 export const getRefreshToken = (): string | null => {
