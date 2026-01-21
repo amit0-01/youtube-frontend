@@ -1,36 +1,35 @@
 import { useEffect } from "react";
 import { toast } from "react-toastify";
 import { storageService } from "../Service/storageService";
-import { useLocation } from 'react-router-dom';
-import { useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 
 export const useAuthRedirect = () => {
   const location = useLocation();
-const pathname = location.pathname;
+  const pathname = location.pathname;
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const publicRoutes = ["/", "/auth/login", "/auth/register", "/about", "/auth/join", "/auth/callback"];
+    // Updated public routes to match your actual routes from main.tsx
+    const publicRoutes = ["/", "/sign-in", "/sign-up"];
 
     // Handle OAuth callback
     if (pathname === "/auth/callback") {
       console.log('🔵 Callback page hit');
       
-      // Try to get encoded data first (new format)
       const encodedData = searchParams.get("data");
-      // Fallback to token (old format)
       const token = searchParams.get("token");
       
       console.log('📦 Encoded data:', encodedData ? 'exists' : 'null');
       console.log('🎫 Token:', token ? 'exists' : 'null');
-      
+
       // NEW FORMAT: Full response data
       if (encodedData) {
         try {
           console.log('✅ Processing encoded data');
           const response = JSON.parse(atob(encodedData));
           console.log('📋 Decoded response:', response);
-          
+
           if (response.success && response.accessToken && response.user) {
             const { accessToken } = response;
             
@@ -39,15 +38,13 @@ const pathname = location.pathname;
             const expiryTime = payload.exp * 1000;
 
             console.log('💾 Storing user data:', response);
-
-            // Store in r
+            
+            // Store user data
             storageService.setItem('user', response);
             localStorage.setItem('tokenExpiry', expiryTime.toString());
-
-            toast.success(response.message || "Successfully logged in with Google!");
             
-            // Redirect to dashboard
-            // router.push('/dashboard');
+            toast.success(response.message || "Successfully logged in with Google!");
+            navigate('/home'); // Changed from /dashboard to /home based on your routes
             return;
           } else {
             throw new Error("Invalid response format");
@@ -55,19 +52,18 @@ const pathname = location.pathname;
         } catch (error) {
           console.error('❌ Error processing OAuth callback:', error);
           toast.error("Authentication failed. Please try again.");
-            //   router.push('/auth/login');
+          navigate('/sign-in');
           return;
         }
-      } 
-      // OLD FORMAT: Just token (fallback for backwards compatibility)
+      }
+      // OLD FORMAT: Just token
       else if (token) {
         try {
           console.log('⚠️ Processing legacy token format');
           
-          // Decode JWT to get user data and expiry
           const payload = JSON.parse(atob(token.split('.')[1]));
           console.log('📋 JWT Payload:', payload);
-          
+
           const userData = {
             accessToken: token,
             id: payload.sub,
@@ -78,31 +74,27 @@ const pathname = location.pathname;
           };
 
           console.log('💾 Storing user data (legacy):', userData);
-
-          // Store token and user data
+          
           storageService.setItem('user', userData);
           
-          // Store token expiry (exp is in seconds, convert to milliseconds)
           const expiryTime = payload.exp * 1000;
           localStorage.setItem('tokenExpiry', expiryTime.toString());
-
-          toast.success("Successfully logged in with Google!");
           
-          // Redirect to dashboard
-        //   router.push('/dashboard');
+          toast.success("Successfully logged in with Google!");
+          navigate('/home'); // Changed from /dashboard to /home
           return;
         } catch (error) {
           console.error('❌ Error processing OAuth token:', error);
           toast.error("Authentication failed. Please try again.");
-        //   router.push('/auth/login');
+          navigate('/sign-in');
           return;
         }
-      } 
+      }
       // NO DATA FOUND
       else {
         console.error('❌ No data or token found in URL');
         toast.error("No authentication data received.");
-        // router.push('/auth/login');
+        navigate('/sign-in');
         return;
       }
     }
@@ -117,16 +109,20 @@ const pathname = location.pathname;
     const token = userData?.accessToken;
     const expiry = localStorage.getItem("tokenExpiry");
 
-    if (Date.now() > Number(expiry) && expiry != null) {
+    // Check if token is expired
+    if (expiry && Date.now() > Number(expiry)) {
       toast.error("Token expired. Please log in again.");
-    }
-
-    if (!token || !expiry || Date.now() > Number(expiry)) {
-      // Clear expired/invalid data
       storageService.removeItem("user");
       localStorage.removeItem("tokenExpiry");
-      
-    //   router.push("/auth/login");
+      navigate("/sign-in");
+      return;
     }
-  }, [pathname, searchParams]);
+
+    // Check if token or expiry is missing
+    if (!token || !expiry) {
+      storageService.removeItem("user");
+      localStorage.removeItem("tokenExpiry");
+      navigate("/sign-in");
+    }
+  }, [pathname, searchParams, navigate]);
 };

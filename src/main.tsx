@@ -14,11 +14,13 @@ import UpdateProfile from './components/UpdateProfile.tsx';
 import { ChatProvider } from './Context/ChatProvider.tsx';
 import ChangePassword from './components/changePassword.tsx';
 import { ToastContainer } from 'react-toastify';
+import AuthWrapper from './components/AuthWrapper';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ChatProvider>
       <BrowserRouter>
+        <AuthWrapper>
         <ToastContainer position="top-right" autoClose={3000} />
         <Routes>
           <Route path="sign-in" element={<SignIn />} />
@@ -34,6 +36,7 @@ createRoot(document.getElementById('root')!).render(
             <Route path="change-password" element={<ChangePassword />} />
           </Route>
         </Routes>
+        </AuthWrapper>
       </BrowserRouter>
     </ChatProvider>
   </StrictMode>
