@@ -1,6 +1,6 @@
 // src/setupFetchInterceptor.ts
 import { toast } from 'react-toastify';
-import { apiUrl } from '../../constant';
+import { apiUrl } from '../../../constant';
 import { getAuthToken, setAuthToken, getRefreshToken } from './auth';
 
 const API_BASE_URL = apiUrl; // Replace with your actual API base URL

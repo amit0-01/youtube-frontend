@@ -6,7 +6,7 @@ import { Outlet } from 'react-router-dom';
 import VideoUploadForm from './components/Dialog/upload-video'
 import Loader from './components/Loader';
 import Chatbox from './components/chatbox';
-import { setupFetchInterceptor } from './utils/interceptor';
+import { setupFetchInterceptor } from './core/utils/interceptor';
 
 setupFetchInterceptor(); 
 function App() {

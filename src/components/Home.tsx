@@ -3,20 +3,9 @@ import { allVideos, increaseViewCount } from '../Service/YoutubeService';
 import { useLocation, useNavigate, useOutletContext } from 'react-router-dom';
 import { dateAgo } from '../Service/Function';
 import { toast } from 'react-toastify';
+import { formatDuration } from '../core/utils/commonfunctions';
+import VideoSkeleton from '../core/skeltons/videoSkelton';
 
-// A simple Skeleton component for better UX during loading
-const VideoSkeleton = () => (
-  <div className="animate-pulse">
-    <div className="bg-gray-300 aspect-video rounded-xl mb-3"></div>
-    <div className="flex space-x-3">
-      <div className="rounded-full bg-gray-300 h-10 w-10"></div>
-      <div className="flex-1 space-y-2">
-        <div className="h-4 bg-gray-300 rounded w-3/4"></div>
-        <div className="h-3 bg-gray-300 rounded w-1/2"></div>
-      </div>
-    </div>
-  </div>
-);
 
 function Home() {
   const [videos, setVideos] = useState<any[]>([]);
@@ -102,9 +91,9 @@ function Home() {
                   className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
                 
-                {/* Duration Badge (Example static value, add dynamic if available) */}
+                {/* Duration Badge */}
                 <div className="absolute bottom-2 right-2 bg-black/80 text-white text-[11px] font-bold px-1.5 py-0.5 rounded">
-                  12:45
+                  {formatDuration(video.duration)}
                 </div>
 
                 {/* Overlay on Hover */}
