@@ -1,4 +1,4 @@
-  import { HeaderProps } from "../interface/interface";
+  import { HeaderProps } from "../core/interface/interface";
   import { useNavigate } from "react-router-dom";
   import { useEffect, useState } from "react";
   import { Menu, MenuItem } from "@mui/material";

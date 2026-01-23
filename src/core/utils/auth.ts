@@ -1,6 +1,6 @@
 // src/utils/auth.ts
 import {jwtDecode} from 'jwt-decode';
-import { AuthTokenData } from '../../interface/auth';
+import { AuthTokenData } from '../interface/auth';
 
 interface DecodedToken {
   exp: number; // Expiry time in seconds since epoch

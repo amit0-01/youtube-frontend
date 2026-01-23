@@ -11,21 +11,8 @@ import Tooltip from '@mui/material/Tooltip';
 import { dateAgo } from '../Service/Function';
 import { Plyr } from "plyr-react";
 import "plyr-react/plyr.css";
+import { Comment } from '../core/interface/watch';
 
-
-interface Comment {
-  _id: string;
-  content: string;
-  owner: {
-    username: string;
-    _id: string
-  };
-}
-
-// interface User {
-//   token: string;
-//   user: string;
-// }
 
 const Watch: any = () => {
   const location = useLocation();

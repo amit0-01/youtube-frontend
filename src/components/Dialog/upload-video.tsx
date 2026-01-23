@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { VideoUploadFormProps } from '../../interface/interface';
+import { VideoUploadFormProps } from '../../core/interface/interface';
 import { uploadVideo } from '../../Service/YoutubeService';
 import { toast } from 'react-toastify';
 

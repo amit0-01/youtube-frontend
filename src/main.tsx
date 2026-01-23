@@ -14,7 +14,7 @@ import UpdateProfile from './components/UpdateProfile.tsx';
 import { ChatProvider } from './Context/ChatProvider.tsx';
 import ChangePassword from './components/changePassword.tsx';
 import { ToastContainer } from 'react-toastify';
-import AuthWrapper from './components/AuthWrapper';
+// import AuthWrapper from './components/AuthWrapper';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

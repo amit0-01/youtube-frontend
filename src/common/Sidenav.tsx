@@ -1,6 +1,6 @@
 import { useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { SidenavProps } from "../interface/interface";
+import { SidenavProps } from "../core/interface/interface";
 
 function Sidenav({ isSidenavOpen, toggleSidenav }: SidenavProps) {
   const location = useLocation();

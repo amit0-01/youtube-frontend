@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from 'react';
-import { ChatContextType, ChatProviderProps } from '../interface/interface';
+import { ChatContextType, ChatProviderProps } from '../core/interface/interface';
 
 
 // Create a context with a default value of `undefined`
