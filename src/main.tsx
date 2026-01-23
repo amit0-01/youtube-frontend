@@ -20,7 +20,7 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ChatProvider>
       <BrowserRouter>
-        <AuthWrapper>
+        {/* <AuthWrapper> */}
         <ToastContainer position="top-right" autoClose={3000} />
         <Routes>
           <Route path="sign-in" element={<SignIn />} />
@@ -36,7 +36,7 @@ createRoot(document.getElementById('root')!).render(
             <Route path="change-password" element={<ChangePassword />} />
           </Route>
         </Routes>
-        </AuthWrapper>
+        {/* </AuthWrapper> */}
       </BrowserRouter>
     </ChatProvider>
   </StrictMode>
