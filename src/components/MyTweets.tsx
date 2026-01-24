@@ -1,62 +1,53 @@
-import { useEffect, useState } from 'react'
-import { dateAgo } from '../Service/Function'
+import { useEffect, useState } from 'react';
+import { dateAgo } from '../Service/Function';
 import { deleteTweet, EditTweet, getAllUserTweets } from '../Service/TweetService';
-import {Input, Tooltip } from '@mui/material';
+import { Input, Tooltip, IconButton } from '@mui/material';
 import WarningDialog from '../common/Warning';
 import Loader from './Loader';
 import { toast } from 'react-toastify';
+
 function MyTweets() {
+  const [tweets, setTweets] = useState<any>([]);
+  const [user, setUser] = useState<any>();
+  const [editTweetId, setEditTweetId] = useState<string | null>(null);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [tweetToDelete, setTweetToDelete] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
-    const[tweets, setTweets] = useState<any>([]);
-    const [user, setUser] = useState<any>();
-    const [editTweetId, setEditTweetId] = useState<string | null>(null); // Track the currently editing tweet
-    const [openDialog, setOpenDialog] = useState(false);
-    const [tweetToDelete, setTweetToDelete] = useState<string | null>(null);
-    const [loading, setLoading] = useState<boolean>(false);
-
-    // GETCH USER DATA
-    useEffect(() => {
-        // FETCH USER DATA
-        const userData = JSON.parse(localStorage.getItem("userInfo") || "{}");
-        
-        if (userData && userData.user) {
-          setUser(userData);
-        } else {
-          toast.error('No user data found in localStorage')
-        }
-      }, []);
-
-
-    // GET USER TWEET FUNCTION
-
-    const getUserTweets = async()=>{
-      setLoading(true);
-      if(user){
-      const response = await getAllUserTweets(user?.accessToken, user?.user._id)
-      if(response.success){
-          setTweets(response.data)
-          setLoading(false);
-      }
+  useEffect(() => {
+    const userData = JSON.parse(localStorage.getItem("userInfo") || "{}");
+    if (userData && userData.user) {
+      setUser(userData);
+    } else {
+      toast.error('No user data found');
     }
-  }
+  }, []);
 
-
-    // GET USER TWEETS WHEN COMPONETN IS INITLISED
-    useEffect(()=>{
-      getUserTweets();
-    },[user])
-
-    // DELTE THE TWEET
-    const handleDelete = async(tweetId:string)=>{
-      setLoading(true);
-     const response = await deleteTweet(tweetId, user.accessToken)
-     if(response.success){
-      getUserTweets();
+  const getUserTweets = async () => {
+    if (!user) return;
+    setLoading(true);
+    try {
+      const response = await getAllUserTweets(user?.accessToken, user?.user._id);
+      if (response.success) setTweets(response.data);
+    } finally {
       setLoading(false);
-     }
-     
     }
-  // CHANGE THE CONTENT WHEN TYPING
+  };
+
+  useEffect(() => {
+    getUserTweets();
+  }, [user]);
+
+  const handleDelete = async (tweetId: string) => {
+    setLoading(true);
+    const response = await deleteTweet(tweetId, user.accessToken);
+    if (response.success) {
+      toast.success("Tweet deleted");
+      getUserTweets();
+    }
+    setLoading(false);
+  };
+
   const handleContentChange = (e: any, tweetId: string) => {
     const updatedTweets = tweets.map((tweet: any) =>
       tweet._id === tweetId ? { ...tweet, content: e.target.value } : tweet
@@ -64,104 +55,123 @@ function MyTweets() {
     setTweets(updatedTweets);
   };
 
-  // EDIT TWEET 
   const handleEdit = async (tweetId: string) => {
     const tweetToEdit = tweets.find((tweet: any) => tweet._id === tweetId);
-  
     if (tweetToEdit) {
       const response = await EditTweet(tweetId, tweetToEdit.content, user.accessToken);
-       if(response.success){
+      if (response.success) {
         toast.success(response.message);
-        getUserTweets();
         setEditTweetId(null);
-       }
-    } else {
-      toast.error('Tweet not found');
+        getUserTweets();
+      }
     }
   };
 
-  // OPEN DIALOG FOR DELETE
   const handleOpenDialog = (tweetId: string) => {
     setTweetToDelete(tweetId);
     setOpenDialog(true);
   };
 
-  const handleConfirmDelete = () => {
-    if (tweetToDelete) {
-      handleDelete(tweetToDelete);
-      setTweetToDelete(null);
-    }
-    setOpenDialog(false);
-  };
-   
-  const handleCloseDialog = () => {
-    setTweetToDelete(null);
-    setOpenDialog(false);
-  };
-  
-
   return (
-    <>
-    { loading ? (<Loader/>) :(
-    <div>
-      {tweets?.length > 0 ? (
-        tweets.map((tweet: any) => (
-          <div key={tweet._id} className=" p-3  border rounded    w-full mt-4">
-            <div className="flex  justify-between">
-              <h2 className=" font-bold">{tweet.owner?.username || 'Unknown User'}</h2>
-              <div>
-                {editTweetId !== tweet._id ? (
-                  <>
-                    <Tooltip title="Delete" arrow>
-                      <span className="cursor-pointer me-2">
-                      <i className="fa-solid fa-trash" onClick={() => handleOpenDialog(tweet._id)}></i>
-                      </span>
-                    </Tooltip>
-
-                    <WarningDialog
-        open={openDialog}
-        title="Confirm Deletion"
-        content="Are you sure you want to delete this tweet?"
-        onConfirm={handleConfirmDelete}
-        onCancel={handleCloseDialog}
-      />
-                    <Tooltip title="Edit" arrow>
-                      <span className="cursor-pointer">
-                        <i className="fa-solid fa-pen-to-square" onClick={() => setEditTweetId(tweet._id)}></i>
-                      </span>
-                    </Tooltip>
-                  </>
-                ) : (
-                  <>
-                    <Tooltip title="Save" arrow>
-                      <span className="cursor-pointer">
-                        <i className="fa-solid fa-check" onClick={() => handleEdit(tweet._id)}></i>
-                      </span>
-                    </Tooltip>
-                  </>
-                )}
-              </div>
-            </div>
-            <p className=" text-sm">{dateAgo(tweet.createdAt)}</p>
-            {editTweetId !== tweet._id ? (
-              <p className=" mt-2">{tweet.content}</p>
-            ) : (
-              <Input
-                value={tweet.content}
-                onChange={(e) => handleContentChange(e, tweet._id)}
-                className="mt-2 w-full"
-              />
-            )}
-          </div>
-        ))
+    <div className="max-w-2xl mx-auto p-4">
+      {loading ? (
+        <Loader />
       ) : (
-        <p>No tweets found.</p>
+        <div className="space-y-4">
+          {tweets?.length > 0 ? (
+            tweets.map((tweet: any) => (
+              <div 
+                key={tweet._id} 
+                className={`bg-white border border-gray-200 rounded-xl p-4 transition-all hover:shadow-md ${
+                  editTweetId === tweet._id ? "ring-2 ring-blue-400 border-transparent" : ""
+                }`}
+              >
+                <div className="flex items-start gap-3">
+                  {/* Avatar Placeholder */}
+                  <div className="h-10 w-10 rounded-full bg-gradient-to-tr from-blue-400 to-purple-500 flex items-center justify-center text-white font-bold shrink-0">
+                    {tweet.owner?.username?.charAt(0).toUpperCase() || 'U'}
+                  </div>
+
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <span className="font-bold text-gray-900 truncate hover:underline cursor-pointer">
+                          {tweet.owner?.username || 'User'}
+                        </span>
+                        <span className="ml-2 text-sm text-gray-500">
+                          · {dateAgo(tweet.createdAt)}
+                        </span>
+                      </div>
+
+                      {/* Actions */}
+                      <div className="flex items-center gap-1">
+                        {editTweetId !== tweet._id ? (
+                          <>
+                            <Tooltip title="Edit">
+                              <IconButton size="small" onClick={() => setEditTweetId(tweet._id)} className="hover:text-blue-600">
+                                <i className="fa-solid fa-pen-to-square text-sm"></i>
+                              </IconButton>
+                            </Tooltip>
+                            <Tooltip title="Delete">
+                              <IconButton size="small" onClick={() => handleOpenDialog(tweet._id)} className="hover:text-red-600">
+                                <i className="fa-solid fa-trash text-sm"></i>
+                              </IconButton>
+                            </Tooltip>
+                          </>
+                        ) : (
+                          <Tooltip title="Save Changes">
+                            <button 
+                              onClick={() => handleEdit(tweet._id)}
+                              className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium transition-colors"
+                            >
+                              Save
+                            </button>
+                          </Tooltip>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Content Area */}
+                    <div className="mt-2 text-gray-800 leading-relaxed">
+                      {editTweetId !== tweet._id ? (
+                        <p className="whitespace-pre-wrap">{tweet.content}</p>
+                      ) : (
+                        <Input
+                          multiline
+                          fullWidth
+                          value={tweet.content}
+                          onChange={(e) => handleContentChange(e, tweet._id)}
+                          className="mt-1 bg-gray-50 p-2 rounded-lg"
+                          disableUnderline
+                          autoFocus
+                        />
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="text-center py-20 bg-gray-50 rounded-xl border-2 border-dashed border-gray-200">
+              <i className="fa-solid fa-feather-pointed text-4xl text-gray-300 mb-3"></i>
+              <p className="text-gray-500 font-medium">No tweets to show yet.</p>
+            </div>
+          )}
+        </div>
       )}
+
+      <WarningDialog
+        open={openDialog}
+        title="Delete Tweet?"
+        content="This can’t be undone and it will be removed from your profile."
+        onConfirm={() => {
+          if (tweetToDelete) handleDelete(tweetToDelete);
+          setOpenDialog(false);
+        }}
+        onCancel={() => setOpenDialog(false)}
+      />
     </div>
-    )
-    }
-    </>
   );
 }
 
-export default MyTweets
+export default MyTweets;
