@@ -247,3 +247,10 @@ export const increaseViewCount = async(token: string,videoId: string)=>{
   toast.error('Failed to increase view count')
  }
 }
+
+export const downloadVideo = (videoId: string) => {
+  window.open(
+    `${apiUrl}/api/v1/videos/download/${videoId}`,
+    "_self"
+  );
+}

@@ -10,7 +10,8 @@ import {
   getSubscribedChannel, 
   editComment, 
   deleteComment, 
-  allVideos 
+  allVideos, 
+  downloadVideo
 } from '../Service/YoutubeService';
 import { Button, Dialog, Input, Tooltip } from '@mui/material';
 import AddToPlaylistDialog from './Dialog/AddToPlaylistDialog';
@@ -245,6 +246,21 @@ const Watch = () => {
     return <div>No video data available</div>;
   }
 
+  // DOWNLOAD VIDEO 
+const handleDownloadVideo = () => {
+  if (!isUserLoggedIn) {
+    alert("Please login to download the video");
+    return;
+  }
+
+  if (!data?._id) {
+    console.error("Video ID missing");
+    return;
+  }
+
+  downloadVideo(data._id);
+};
+
   return (
     <div className='md:mx-3'>
       <div className="grid md:grid-cols-3 gap-5">
@@ -309,8 +325,11 @@ const Watch = () => {
                     </div>
                     <i className="fa-regular fa-thumbs-down text-lg cursor-pointer" />
                     <i className="fa-solid fa-share text-lg cursor-pointer hidden md:block" />
-                    <i className="fa-solid fa-download text-lg cursor-pointer hidden md:block" />
-                    <i className="fa-solid fa-scissors text-lg cursor-pointer md:block" />
+                    <i
+                      className="fa-solid fa-download text-lg cursor-pointer hidden md:block"
+                      onClick={handleDownloadVideo}
+                    />                   
+                     <i className="fa-solid fa-scissors text-lg cursor-pointer md:block" />
                     <i className="fa-regular fa-bookmark text-lg cursor-pointer hidden md:block" />
                     <Tooltip title={isUserLoggedIn ? 'Save video' : 'Login to save the video'}>
                       <i 
