@@ -15,7 +15,7 @@ import {
 } from '../Service/YoutubeService';
 import { Button, Dialog, Input, Tooltip } from '@mui/material';
 import AddToPlaylistDialog from './Dialog/AddToPlaylistDialog';
-import Loader from './Loader';
+import WatchSkeleton from '../core/skeltons/watch';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { dateAgo } from '../Service/Function';
@@ -36,7 +36,8 @@ const Watch = () => {
   const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
   const [openDialog, setOpenDialog] = useState(false);
   const [videoData, setVideoData] = useState<any[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [initialLoading, setInitialLoading] = useState(true);
 
   const videoId = useMemo(() => data?._id || '', [data]);
   const isUserLoggedIn = useMemo(() => !!token, [token]);
@@ -65,13 +66,12 @@ const Watch = () => {
   useEffect(() => {
     const fetchAllVideos = async () => {
       try {
-        setLoading(true);
         const res = await allVideos();
         setVideoData(res);
       } catch (error) {
         toast.error('Error fetching videos');
       } finally {
-        setLoading(false);
+        setInitialLoading(false);
       }
     };
     fetchAllVideos();
@@ -80,7 +80,10 @@ const Watch = () => {
   // Fetch video-related data when dependencies change
   useEffect(() => {
     const fetchVideoData = async () => {
-      if (!user || !token || !videoId) return;
+      if (!user || !token || !videoId) {
+        setInitialLoading(false);
+        return;
+      }
 
       try {
         const [likedRes, subscribedRes] = await Promise.all([
@@ -93,6 +96,8 @@ const Watch = () => {
         await fetchComments();
       } catch (error) {
         toast.error('Error fetching data');
+      } finally {
+        setInitialLoading(false);
       }
     };
 
@@ -238,28 +243,29 @@ const Watch = () => {
     }
   }, [isUserLoggedIn]);
 
-  if (loading) {
-    return <Loader />;
+  // DOWNLOAD VIDEO 
+  const handleDownloadVideo = () => {
+    if (!isUserLoggedIn) {
+      alert("Please login to download the video");
+      return;
+    }
+
+    if (!data?._id) {
+      console.error("Video ID missing");
+      return;
+    }
+
+    downloadVideo(data._id);
+  };
+
+  // Show skeleton while initial loading
+  if (initialLoading) {
+    return <WatchSkeleton />;
   }
 
   if (!data) {
     return <div>No video data available</div>;
   }
-
-  // DOWNLOAD VIDEO 
-const handleDownloadVideo = () => {
-  if (!isUserLoggedIn) {
-    alert("Please login to download the video");
-    return;
-  }
-
-  if (!data?._id) {
-    console.error("Video ID missing");
-    return;
-  }
-
-  downloadVideo(data._id);
-};
 
   return (
     <div className='md:mx-3'>
@@ -329,7 +335,7 @@ const handleDownloadVideo = () => {
                       className="fa-solid fa-download text-lg cursor-pointer hidden md:block"
                       onClick={handleDownloadVideo}
                     />                   
-                     <i className="fa-solid fa-scissors text-lg cursor-pointer md:block" />
+                    <i className="fa-solid fa-scissors text-lg cursor-pointer md:block" />
                     <i className="fa-regular fa-bookmark text-lg cursor-pointer hidden md:block" />
                     <Tooltip title={isUserLoggedIn ? 'Save video' : 'Login to save the video'}>
                       <i 
