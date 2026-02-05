@@ -22,6 +22,7 @@ import { dateAgo } from '../Service/Function';
 import { Plyr } from "plyr-react";
 import "plyr-react/plyr.css";
 import { Comment } from '../core/interface/watch';
+import ShareDialog from './Dialog/shareDialog';
 
 const Watch = () => {
   const location = useLocation();
@@ -35,6 +36,7 @@ const Watch = () => {
   const [likedItems, setLikedItems] = useState<Set<string>>(new Set());
   const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
   const [openDialog, setOpenDialog] = useState(false);
+  const [openShareDialog, setOpenShareDialog] = useState(false);
   const [videoData, setVideoData] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [initialLoading, setInitialLoading] = useState(true);
@@ -243,6 +245,11 @@ const Watch = () => {
     }
   }, [isUserLoggedIn]);
 
+  // Handle share dialog
+  const handleShareVideo = useCallback(() => {
+    setOpenShareDialog(true);
+  }, []);
+
   // DOWNLOAD VIDEO 
   const handleDownloadVideo = () => {
     if (!isUserLoggedIn) {
@@ -330,7 +337,12 @@ const Watch = () => {
                       <span className="text-sm">26</span>
                     </div>
                     <i className="fa-regular fa-thumbs-down text-lg cursor-pointer" />
-                    <i className="fa-solid fa-share text-lg cursor-pointer hidden md:block" />
+                    <Tooltip title="Share">
+                      <i 
+                        className="fa-solid fa-share text-lg cursor-pointer hidden md:block" 
+                        onClick={handleShareVideo}
+                      />
+                    </Tooltip>
                     <i
                       className="fa-solid fa-download text-lg cursor-pointer hidden md:block"
                       onClick={handleDownloadVideo}
@@ -473,6 +485,15 @@ const Watch = () => {
           videoId={videoId}
           open={openDialog}
           onClose={() => setOpenDialog(false)}
+        />
+      </Dialog>
+
+      <Dialog open={openShareDialog} onClose={() => setOpenShareDialog(false)}>
+        <ShareDialog
+          videoUrl={`${window.location.origin}/watch/${videoId}`}
+          videoTitle={data.title}
+          videoThumbnail={data.thumbnail}
+          onClose={() => setOpenShareDialog(false)}
         />
       </Dialog>
     </div>
