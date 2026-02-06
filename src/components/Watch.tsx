@@ -343,10 +343,14 @@ const Watch = () => {
                         onClick={handleShareVideo}
                       />
                     </Tooltip>
+                    <Tooltip title="Download">
+
                     <i
                       className="fa-solid fa-download text-lg cursor-pointer hidden md:block"
                       onClick={handleDownloadVideo}
                     />                   
+                                        </Tooltip>
+
                     <i className="fa-solid fa-scissors text-lg cursor-pointer md:block" />
                     <i className="fa-regular fa-bookmark text-lg cursor-pointer hidden md:block" />
                     <Tooltip title={isUserLoggedIn ? 'Save video' : 'Login to save the video'}>
