@@ -4,6 +4,7 @@ import { FormValues, FormErrors } from '../core/interface/interface';
 import { signIn } from '../Service/YoutubeService';
 import { toast } from 'react-toastify';
 import Loader from './Loader';
+import { storageService } from '../Service/storageService';
 
 
 const Login: React.FC = () => {
@@ -45,11 +46,27 @@ const Login: React.FC = () => {
         setLoading(true);
         const response = await signIn(formValues)
         
-        if(response.success){
-          localStorage.setItem('userInfo', JSON.stringify(response.data));
-          navigate('/home', { state: {message: 'Login successfull' } });
-          setLoading(false);
-        } else{
+       // In SignIn.tsx
+      if (response.success) {
+        // Store user data consistently
+        storageService.setItem('user', response.data);
+        
+        // Get expiry from the token if available, otherwise use 1 minute from now
+        // let expiryTime = Date.now() + 60 * 1000; // Default 1 minute
+        // if (response.data.accessToken) {
+        //   try {
+        //     const payload = JSON.parse(atob(response.data.accessToken.split('.')[1]));
+        //     expiryTime = payload.exp * 1000;
+        //   } catch (e) {
+        //     console.warn('Failed to parse token for expiry, using default 1 hour');
+        //   }
+        // }
+        
+        // localStorage.setItem('tokenExpiry', expiryTime.toString());
+        navigate('/home', { state: { message: 'Login successful' } });
+        setLoading(false);
+      }
+         else{
           setLoading(false);
 
           toast.error('INCORRECT EMAIL OR PASSWORD');
