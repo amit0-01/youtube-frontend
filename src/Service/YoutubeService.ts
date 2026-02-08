@@ -2,25 +2,7 @@ import { toast } from 'react-toastify';
 import {apiUrl} from '../../constant'
 import { urlRoutes } from './urlService';
 import axios from 'axios';
-export async function allVideos(text?: string) {  
-  const baseUrl = `${apiUrl}/${urlRoutes.getVideo}`;
-  
-  const url = new URL(baseUrl);
 
-  if (text) {
-    url.searchParams.append('query', text);
-  }
-  const response = await fetch(url.toString(), {
-    method: 'GET', 
-  });
-
-  if (!response.ok) {
-    throw new Error('Failed to fetch videos');
-  }
-
-  const data = await response.json();
-  return data.data;
-}
 export async function uploadVideo(
   formValues: { title: string, videoFile: File | null, thumbnail: File | null, description: string, duration: any },
   token: string,

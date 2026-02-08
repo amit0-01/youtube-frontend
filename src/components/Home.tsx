@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
-import { allVideos, increaseViewCount } from '../Service/YoutubeService';
+import { increaseViewCount } from '../Service/YoutubeService';
 import { useLocation, useNavigate, useOutletContext } from 'react-router-dom';
 import { dateAgo } from '../Service/Function';
 import { toast } from 'react-toastify';
 import { formatDuration } from '../core/utils/commonfunctions';
 import VideoSkeleton from '../core/skeltons/videoSkelton';
+import { allVideos } from '../Service/home.service';
 
 
 function Home() {

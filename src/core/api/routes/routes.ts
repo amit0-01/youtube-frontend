@@ -1,3 +1,3 @@
 export const apiRoutes = {
-    getVideo: '/api/v1/videos',    
+    getVideo: '/api/v1/videos/videoActions',    
 }

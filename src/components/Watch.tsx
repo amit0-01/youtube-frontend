@@ -10,7 +10,6 @@ import {
   getSubscribedChannel, 
   editComment, 
   deleteComment, 
-  allVideos, 
   downloadVideo
 } from '../Service/YoutubeService';
 import { Button, Dialog, Input, Tooltip } from '@mui/material';
@@ -23,6 +22,7 @@ import { Plyr } from "plyr-react";
 import "plyr-react/plyr.css";
 import { Comment } from '../core/interface/watch';
 import ShareDialog from './Dialog/shareDialog';
+import { allVideos } from '../Service/home.service';
 
 const Watch = () => {
   const location = useLocation();
