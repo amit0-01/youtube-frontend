@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { getAllTweets, postTweet, toggleTweetLikeDisLike } from '../Service/TweetService';
 import { dateAgo } from '../Service/Function';
-import Loader from './Loader';
 import { Tooltip } from '@mui/material';
 import { toast } from 'react-toastify';
 
@@ -45,7 +44,7 @@ function Tweets() {
       return;
     }
     try {
-      const response = await toggleTweetLikeDisLike(tweetId, token);
+      const response = await toggleTweetLikeDisLike(tweetId);
       toast.success(response.message);
       fetchAllTweets();
     } catch (error:any) {
@@ -66,7 +65,7 @@ function Tweets() {
     }
 
     try {
-      await postTweet(tweetContent, token);
+      await postTweet(tweetContent);
       toast.success("Tweet posted successfully!");
       setTweetContent("");
       fetchAllTweets(); 

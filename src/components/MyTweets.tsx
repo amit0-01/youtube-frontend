@@ -27,7 +27,7 @@ function MyTweets() {
     if (!user) return;
     setLoading(true);
     try {
-      const response = await getAllUserTweets(user?.accessToken, user?.user._id);
+      const response = await getAllUserTweets(user?.user._id);
       if (response.success) setTweets(response.data);
     } finally {
       setLoading(false);
@@ -40,7 +40,7 @@ function MyTweets() {
 
   const handleDelete = async (tweetId: string) => {
     setLoading(true);
-    const response = await deleteTweet(tweetId, user.accessToken);
+    const response = await deleteTweet(tweetId);
     if (response.success) {
       toast.success("Tweet deleted");
       getUserTweets();
@@ -58,7 +58,7 @@ function MyTweets() {
   const handleEdit = async (tweetId: string) => {
     const tweetToEdit = tweets.find((tweet: any) => tweet._id === tweetId);
     if (tweetToEdit) {
-      const response = await EditTweet(tweetId, tweetToEdit.content, user.accessToken);
+      const response = await EditTweet(tweetId, tweetToEdit.content);
       if (response.success) {
         toast.success(response.message);
         setEditTweetId(null);
