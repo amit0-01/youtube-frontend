@@ -1,17 +1,17 @@
 import { useEffect, useState, useCallback, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 import { 
-  getLikedVideos, 
-  getIndividualVideoComments, 
-  addComment, 
+  addComment,
   likeComment, 
   toogleLike, 
   toogleSubscription, 
   getSubscribedChannel, 
   editComment, 
   deleteComment, 
-  downloadVideo
-} from '../Service/YoutubeService';
+  downloadVideo,
+  getIndividualVideoComments,
+  getLikedVideos
+} from '../Service/watch.service';
 import { Button, Dialog, Input, Tooltip } from '@mui/material';
 import AddToPlaylistDialog from './Dialog/AddToPlaylistDialog';
 import WatchSkeleton from '../core/skeltons/watch';
@@ -57,7 +57,7 @@ const Watch = () => {
   const fetchComments = useCallback(async () => {
     if (!videoId || !token) return;
     try {
-      const res = await getIndividualVideoComments(videoId, token);
+      const res = await getIndividualVideoComments(videoId);
       setComments(res.data || []);
     } catch (error) {
       toast.error('Failed to fetch comments');
@@ -89,8 +89,8 @@ const Watch = () => {
 
       try {
         const [likedRes, subscribedRes] = await Promise.all([
-          getLikedVideos(videoId, token),
-          getSubscribedChannel(user, token)
+          getLikedVideos(videoId),
+          getSubscribedChannel(user)
         ]);
 
         setVideoIsLiked(!!likedRes.likedVideos);
@@ -112,7 +112,7 @@ const Watch = () => {
 
     try {
       setLoading(true);
-      const res = await addComment(videoId, token, commentContent);
+      const res = await addComment(videoId, commentContent);
       
       if (res.success) {
         setCommentContent('');
@@ -124,14 +124,14 @@ const Watch = () => {
     } finally {
       setLoading(false);
     }
-  }, [isUserLoggedIn, commentContent, videoId, token, fetchComments]);
+  }, [isUserLoggedIn, commentContent, videoId, fetchComments]);
 
   // Like comment handler
   const handleLikeComment = useCallback(async (commentId: string) => {
     if (!isUserLoggedIn) return;
 
     try {
-      const response = await likeComment(commentId, token);
+      const response = await likeComment(commentId);
       
       if (response.success) {
         setLikedItems(prev => {
@@ -147,20 +147,20 @@ const Watch = () => {
     } catch (error) {
       toast.error('Failed to like comment');
     }
-  }, [isUserLoggedIn, token]);
+  }, [isUserLoggedIn]);
 
   // Toggle video like
   const handleToggleLike = useCallback(async () => {
     if (!isUserLoggedIn) return;
 
     try {
-      const res = await toogleLike(videoId, token);
+      const res = await toogleLike(videoId);
       toast.success(res.message);
       setVideoIsLiked(res.message === 'Video liked successfully');
     } catch (error) {
       toast.error('Failed to toggle like');
     }
-  }, [isUserLoggedIn, videoId, token]);
+  }, [isUserLoggedIn, videoId]);
 
   // Toggle subscription
   const handleToggleSubscription = useCallback(async () => {
@@ -168,7 +168,7 @@ const Watch = () => {
 
     try {
       setLoading(true);
-      const res = await toogleSubscription(user, token);
+      const res = await toogleSubscription(user);
       
       if (res.success) {
         toast.success(res.message);
@@ -179,18 +179,14 @@ const Watch = () => {
     } finally {
       setLoading(false);
     }
-  }, [isUserLoggedIn, user, token]);
+  }, [isUserLoggedIn, user]);
 
   // Edit comment handler
   const handleEditComment = useCallback(async (comment: Comment) => {
     if (!isUserLoggedIn) return;
 
     try {
-      await editComment({
-        commentId: comment._id,
-        content: comment.content,
-        token
-      });
+      await editComment(comment._id, comment.content);
       
       setEditingCommentId(null);
       await fetchComments();
@@ -198,7 +194,7 @@ const Watch = () => {
     } catch (error) {
       toast.error('Failed to edit comment');
     }
-  }, [isUserLoggedIn, token, fetchComments]);
+  }, [isUserLoggedIn, fetchComments]);
 
   // Delete comment handler
   const handleDeleteComment = useCallback(async (commentId: string) => {
@@ -206,7 +202,7 @@ const Watch = () => {
 
     try {
       setLoading(true);
-      const res = await deleteComment({ commentId, token });
+      const res = await deleteComment(commentId);
       
       if (res.success) {
         setComments(prev => prev.filter(c => c._id !== commentId));
@@ -219,7 +215,7 @@ const Watch = () => {
     } finally {
       setLoading(false);
     }
-  }, [isUserLoggedIn, token]);
+  }, [isUserLoggedIn]);
 
   // Change video handler
   const handleVideoUrl = useCallback((video: any) => {

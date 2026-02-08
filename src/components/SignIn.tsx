@@ -49,7 +49,7 @@ const Login: React.FC = () => {
        // In SignIn.tsx
       if (response.success) {
         // Store user data consistently
-        storageService.setItem('user', response.data);
+        storageService.setItem('userInfo', response.data);
         
         // Get expiry from the token if available, otherwise use 1 minute from now
         // let expiryTime = Date.now() + 60 * 1000; // Default 1 minute

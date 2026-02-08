@@ -80,65 +80,6 @@ const getAuthHeaders = (token: string) => ({
   }
 });
 
-export const getLikedVideos = async (videoId: string, token: string) => {
-  const url = `${apiUrl}/api/v1/likes/videos/${videoId}`;
-  const response = await axios.get(url, getAuthHeaders(token));
-  return response.data;
-};
-
-export const getIndividualVideoComments = async (videoId: string, token: string) => {  
-  const url = `${apiUrl}/api/v1/comments/${videoId}`;
-  const response = await axios.get(url, getAuthHeaders(token));
-  return response.data;
-};
-
-export const addComment = async (videoId: string, token: string, content: string) => {
-  const url = `${apiUrl}/api/v1/comments/${videoId}`;
-  const response = await axios.post(url, { content }, getAuthHeaders(token));
-  return response.data;
-};
-
-export const likeComment = async (commentId: string, token: string) => {
-  const url = `${apiUrl}/api/v1/likes/toggle/c/${commentId}`;
-  const response = await axios.post(url, {}, getAuthHeaders(token));
-  return response.data;
-};
-
-export const toogleLike = async (videoId: string, token: string) => {
-  const url = `${apiUrl}/api/v1/likes/toggle/v/${videoId}`;
-  const response = await axios.post(url, {}, getAuthHeaders(token));
-  return response.data;
-};
-
-export const toogleSubscription = async (channelId: string, token: string) => {
-  const url = `${apiUrl}/api/v1/subscriptions/c/${channelId}`;
-  const response = await axios.post(url, {}, getAuthHeaders(token));
-  return response.data;
-};
-
-export const getSubscribedChannel = async (channelId: string, token: string) => {
-  const url = `${apiUrl}/api/v1/subscriptions/c/${channelId}`;
-  const response = await axios.get(url, getAuthHeaders(token));
-  return response.data;
-};
-
-export const editComment = async (data: { commentId: string; content: string; token: string }) => {
-  const url = `${apiUrl}/api/v1/comments/c/${data.commentId}`;
-  const response = await axios.patch(url, { content: data.content }, getAuthHeaders(data.token));
-  return response.data;
-};
-
-export const deleteComment = async (data: { commentId: string; token: string }) => {
-  const url = `${apiUrl}/api/v1/comments/c/${data.commentId}`;
-  const response = await axios.delete(url, getAuthHeaders(data.token));
-  return response.data;
-};
-
-export const addPlaylist = async (playlistName: string, playlistDescription: string, token: string) => {
-  const url = `${apiUrl}/api/v1/playlist/create`;
-  const response = await axios.post(url, { name: playlistName, description: playlistDescription }, getAuthHeaders(token));
-  return response.data;
-};
 
 export const getPlaylist = async (token: string, userId: string) => {
   const url = `${apiUrl}/api/v1/playlist/user/${userId}`;
@@ -216,11 +157,4 @@ export const increaseViewCount = async(token: string,videoId: string)=>{
  } catch (error) {
   toast.error('Failed to increase view count')
  }
-}
-
-export const downloadVideo = (videoId: string) => {
-  window.open(
-    `${apiUrl}/api/v1/videos/download/${videoId}`,
-    "_self"
-  );
 }
