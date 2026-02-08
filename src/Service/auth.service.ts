@@ -1,13 +1,13 @@
 // sigin in 
 
-import api from "../core/interceptors/axios";
+import api from "../core/api/interceptors/axios";
 
 export const signIn = async (formValues:any) => {
   try {
   const response = await api.post("/api/v1/users/login", formValues);
-    return response.data; // Return the response data
+    return response.data; 
   } catch (error) {
     return error;
-    throw error; // Rethrow the error to handle it in the component if needed
+    throw error; 
   }
 };
