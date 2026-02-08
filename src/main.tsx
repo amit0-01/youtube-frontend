@@ -34,6 +34,7 @@ createRoot(document.getElementById('root')!).render(
             <Route path="tweets" element={<Tweets />} />
             <Route path="update-profile" element={<UpdateProfile />} />
             <Route path="change-password" element={<ChangePassword />} />
+            <Route path="*" element={<Navigate to="/home" replace />} />
           </Route>
         </Routes>
         {/* </AuthWrapper> */}

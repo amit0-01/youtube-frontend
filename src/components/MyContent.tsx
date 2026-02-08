@@ -64,35 +64,6 @@ function MyContent() {
   navigate('/update-profile');
   };
 
-  // const handleFileChange = async (event:any) =>{
-  //   const file = event.target.files[0];
-  //   if(file){
-  //     const formData = new FormData();
-  //     formData.append('avatar', file);
-  //     try {
-  //       const res = await changeUserAvatar(formData, token);
-  //       setAvatar(res.data.avatar)
-
-  //       // set the avatar in localstorage also
-  //       const userInfo = JSON.parse(localStorage.getItem("userInfo") || "{}");
-  //       const updatedUserInfo = {
-  //         ...userInfo,
-  //         user: {
-  //           ...userInfo.user,
-  //           avatar: res.data.avatar
-  //         }
-  //       }
-  //       localStorage.setItem('userInfo',JSON.stringify(updatedUserInfo));
-  //     } catch (error) {
-  //     }
-  //   }
-  // }
- 
-
-
-
-
-
   return (
     loading ? (
       <div className="flex justify-center items-center h-screen">
@@ -100,7 +71,7 @@ function MyContent() {
       </div>
     ) : (
       token ? (
-        <div className="max-w-6xl mx-auto">
+        <div className="mx-auto">
           {/* Cover Photo Section */}
           <div className="relative">
             <div 

@@ -19,7 +19,6 @@ interface ShareDialogProps {
 const ShareDialog: React.FC<ShareDialogProps> = ({ 
   videoUrl, 
   videoTitle, 
-  videoThumbnail, 
   onClose 
 }) => {
   const [copied, setCopied] = useState(false);

@@ -270,8 +270,12 @@ const Watch = () => {
     return <div>No video data available</div>;
   }
 
-  return (
-    <div className='md:mx-3'>
+  return loading ? (
+  <div className="flex justify-center items-center h-64">
+    <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-200 border-t-blue-600"></div>
+  </div>
+) : (
+  <div className='md:mx-3'>
       <div className="grid md:grid-cols-3 gap-5">
         <main className='md:col-span-2'>
           {data.videoFile && (
