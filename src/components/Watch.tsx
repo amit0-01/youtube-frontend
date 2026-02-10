@@ -57,10 +57,13 @@ const Watch = () => {
   const fetchComments = useCallback(async () => {
     if (!videoId || !token) return;
     try {
+      setLoading(true);
       const res = await getIndividualVideoComments(videoId);
       setComments(res.data || []);
     } catch (error) {
       toast.error('Failed to fetch comments');
+    } finally {
+      setLoading(false);
     }
   }, [videoId, token]);
 
@@ -83,7 +86,6 @@ const Watch = () => {
   useEffect(() => {
     const fetchVideoData = async () => {
       if (!user || !token || !videoId) {
-        setInitialLoading(false);
         return;
       }
 
@@ -98,8 +100,6 @@ const Watch = () => {
         await fetchComments();
       } catch (error) {
         toast.error('Error fetching data');
-      } finally {
-        setInitialLoading(false);
       }
     };
 
@@ -261,7 +261,18 @@ const Watch = () => {
     downloadVideo(data._id);
   };
 
-  // Show skeleton while initial loading
+  // Handle video data fetch errors
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (initialLoading) {
+        setInitialLoading(false);
+      }
+    }, 5000); // 5 seconds timeout
+
+    return () => clearTimeout(timer);
+  }, [initialLoading]);
+
+  // Show skeleton only during initial loading
   if (initialLoading) {
     return <WatchSkeleton />;
   }
@@ -270,12 +281,8 @@ const Watch = () => {
     return <div>No video data available</div>;
   }
 
-  return loading ? (
-  <div className="flex justify-center items-center h-64">
-    <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-200 border-t-blue-600"></div>
-  </div>
-) : (
-  <div className='md:mx-3'>
+  return (
+    <div className='md:mx-3'>
       <div className="grid md:grid-cols-3 gap-5">
         <main className='md:col-span-2'>
           {data.videoFile && (
