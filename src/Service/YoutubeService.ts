@@ -53,12 +53,13 @@ export async function uploadVideo(
 
     // Listen for the request to complete
     xhr.onload = function () {
-      if (xhr.status === 200) {
-        resolve(JSON.parse(xhr.responseText));
-      } else {
-        reject(new Error(`Failed to upload video: ${xhr.statusText}`));
-      }
-    };
+    if (xhr.status >= 200 && xhr.status < 300) {
+      resolve(JSON.parse(xhr.responseText));
+    } else {
+      reject(new Error(`Failed to upload video: ${xhr.statusText}`));
+    }
+  };
+
 
     // Handle errors
     xhr.onerror = function () {

@@ -3,7 +3,7 @@ import { storageService } from "../../../Service/storageService";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
-  withCredentials: true, // if you later use cookies
+  // withCredentials: true, // if you later use cookies
 });
 
 // ✅ Request interceptor
