@@ -7,11 +7,13 @@ import { formatDuration } from '../core/utils/commonfunctions';
 import VideoSkeleton from '../core/skeltons/videoSkelton';
 import { allVideos } from '../Service/home.service';
 
-
 function Home() {
   const [videos, setVideos] = useState<any[]>([]);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(true);
   const [token, setToken] = useState<string | null>(null);
   const { searchTerm } = useOutletContext<{ searchTerm: string }>();
   const location = useLocation();
@@ -25,6 +27,22 @@ function Home() {
   }, [message, navigate]);
 
   useEffect(() => {
+    function handleScroll() {
+      if (
+        window.innerHeight + window.scrollY >=
+          document.documentElement.scrollHeight - 200 &&
+        !loading &&
+        hasMore
+      ) {
+        setPage(prev => prev + 1);
+      }
+    }
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [loading, hasMore]);
+
+  useEffect(() => {
     const userData = JSON.parse(localStorage.getItem('userInfo') || '{}');
     if (userData?.accessToken) {
       setToken(userData.accessToken);
@@ -32,19 +50,42 @@ function Home() {
   }, []);
 
   useEffect(() => {
-    async function fetchVideos() {
-      try {
-        setLoading(true);
-        const data = await allVideos(searchTerm);
-        setVideos(data);
-      } catch (error: any) {
-        toast.error('Failed to load videos');
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchVideos();
+    setVideos([]);
+    setPage(1);
+    setHasMore(true);
+    setInitialLoading(true);
   }, [searchTerm]);
+
+  async function fetchVideos() {
+    if (!hasMore || loading) return;
+
+    try {
+      setLoading(true);
+      const res = await allVideos(searchTerm, page, 10);
+
+      if (page === 1) {
+        setVideos(res.data);
+        setInitialLoading(false);
+      } else {
+        setVideos(prev => [...prev, ...res.data]);
+      }
+
+      // Check if we've reached the last page
+      if (page >= res.totalPages || res.data.length === 0) {
+        setHasMore(false);
+      }
+
+    } catch (error) {
+      toast.error("Failed to load videos");
+      setHasMore(false);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    fetchVideos();
+  }, [page, searchTerm]);
 
   async function handleVideoClick(video: any) {
     if (token) {
@@ -55,14 +96,15 @@ function Home() {
 
   return (
     <div className="min-h-screen bg-white px-4 py-8 md:px-8">
-      {/* Search Result Header (Optional) */}
+      {/* Search Result Header */}
       {searchTerm && (
         <h2 className="text-xl font-medium mb-6 text-gray-700">
           Results for: <span className="font-bold text-black">"{searchTerm}"</span>
         </h2>
       )}
 
-      {loading ? (
+      {/* Initial Loading State */}
+      {initialLoading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-x-4 gap-y-8">
           {[...Array(10)].map((_, i) => <VideoSkeleton key={i} />)}
         </div>
@@ -77,58 +119,74 @@ function Home() {
           <p className="text-gray-500">Try adjusting your search or filters.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-x-4 gap-y-10">
-          {videos.map((video: any) => (
-            <div
-              key={video._id}
-              className="cursor-pointer group flex flex-col"
-              onClick={() => handleVideoClick(video)}
-            >
-              {/* Thumbnail Container */}
-              <div className="relative aspect-video w-full overflow-hidden rounded-2xl bg-gray-100">
-                <img
-                  src={video.thumbnail}
-                  alt={video.title}
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                />
-                
-                {/* Duration Badge */}
-                <div className="absolute bottom-2 right-2 bg-black/80 text-white text-[11px] font-bold px-1.5 py-0.5 rounded">
-                  {formatDuration(video.duration)}
-                </div>
+        <>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-x-4 gap-y-10">
+            {videos.map((video: any) => (
+              <div
+                key={video._id}
+                className="cursor-pointer group flex flex-col"
+                onClick={() => handleVideoClick(video)}
+              >
+                {/* Thumbnail Container */}
+                <div className="relative aspect-video w-full overflow-hidden rounded-2xl bg-gray-100">
+                  <img
+                    src={video.thumbnail}
+                    alt={video.title}
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  
+                  {/* Duration Badge */}
+                  <div className="absolute bottom-2 right-2 bg-black/80 text-white text-[11px] font-bold px-1.5 py-0.5 rounded">
+                    {formatDuration(video.duration)}
+                  </div>
 
-                {/* Overlay on Hover */}
-                <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                   <div className="bg-white/20 backdrop-blur-md rounded-full p-3 shadow-lg">
+                  {/* Overlay on Hover */}
+                  <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <div className="bg-white/20 backdrop-blur-md rounded-full p-3 shadow-lg">
                       <svg className="w-8 h-8 text-white fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
-                   </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
 
-              {/* Video Info */}
-              <div className="mt-3 flex gap-3 px-1">
-                <img
-                  src={video.ownerInfo?.avatar || "https://ui-avatars.com/api/?name=" + video.ownerInfo?.username}
-                  alt="channel"
-                  className="h-9 w-9 shrink-0 rounded-full object-cover border border-gray-100"
-                />
-                <div className="flex flex-col overflow-hidden">
-                  <h3 className="text-sm font-bold text-gray-900 line-clamp-2 leading-snug group-hover:text-blue-600 transition-colors">
-                    {video.title}
-                  </h3>
-                  <div className="mt-1 flex flex-col">
-                    <p className="text-xs text-gray-500 hover:text-gray-900 transition-colors font-medium">
-                      {video.ownerInfo?.username}
-                    </p>
-                    <p className="text-[12px] text-gray-400 mt-0.5">
-                      {video.views.toLocaleString()} views • {dateAgo(video.createdAt)}
-                    </p>
+                {/* Video Info */}
+                <div className="mt-3 flex gap-3 px-1">
+                  <img
+                    src={video.ownerInfo?.avatar || "https://ui-avatars.com/api/?name=" + video.ownerInfo?.username}
+                    alt="channel"
+                    className="h-9 w-9 shrink-0 rounded-full object-cover border border-gray-100"
+                  />
+                  <div className="flex flex-col overflow-hidden">
+                    <h3 className="text-sm font-bold text-gray-900 line-clamp-2 leading-snug group-hover:text-blue-600 transition-colors">
+                      {video.title}
+                    </h3>
+                    <div className="mt-1 flex flex-col">
+                      <p className="text-xs text-gray-500 hover:text-gray-900 transition-colors font-medium">
+                        {video.ownerInfo?.username}
+                      </p>
+                      <p className="text-[12px] text-gray-400 mt-0.5">
+                        {video.views.toLocaleString()} views • {dateAgo(video.createdAt)}
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
+            ))}
+          </div>
+
+          {/* Loading More Indicator */}
+          {loading && page > 1 && (
+            <div className="flex justify-center items-center py-8">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
             </div>
-          ))}
-        </div>
+          )}
+
+          {/* End of Results */}
+          {!hasMore && videos.length > 0 && (
+            <div className="text-center py-8 text-gray-500">
+              No more videos to load
+            </div>
+          )}
+        </>
       )}
     </div>
   );
