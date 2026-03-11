@@ -27,7 +27,7 @@ createRoot(document.getElementById('root')!).render(
           <Route path="/" element={<App />}>
             <Route path="/" element={<Navigate to="/home" replace />} />
             <Route path="home" element={<Home />} />
-            <Route path="watch" element={<Watch />} />
+            <Route path="watch/:id" element={<Watch />} />
             <Route path="playlist" element={<Playlist />} />
             <Route path="sign-up" element={<SignUpForm />} />
             <Route path="my-content" element={<MyContent />} />

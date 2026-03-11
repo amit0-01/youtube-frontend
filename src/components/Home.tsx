@@ -88,14 +88,24 @@ function Home() {
   }, [page, searchTerm]);
 
   async function handleVideoClick(video: any) {
+    console.log('vidoe', video);
+  try {
     if (token) {
       await increaseViewCount(token, video._id);
     }
-    navigate(`/watch`, { state: { video } });
+    // Navigate with the video data
+    navigate(`/watch/${video._id}`, { 
+      state: { video },
+      replace: false 
+    });
+  } catch (error) {
+    console.error('Error navigating to video:', error);
+    toast.error('Failed to load video');
   }
+}
 
   return (
-    <div className="min-h-screen bg-white px-4 py-8 md:px-8">
+    <div className="min-h-screen bg-white px-4 py-8">
       {/* Search Result Header */}
       {searchTerm && (
         <h2 className="text-xl font-medium mb-6 text-gray-700">

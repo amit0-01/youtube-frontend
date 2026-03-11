@@ -51,6 +51,7 @@ const Watch = () => {
       setUser(userData.user._id);
       setToken(userData.accessToken);
     }
+    console.log('data', data);
   }, []);
 
   // Fetch comments - memoized
@@ -68,19 +69,20 @@ const Watch = () => {
   }, [videoId, token]);
 
   // Fetch all video data once
-  useEffect(() => {
-    const fetchAllVideos = async () => {
-      try {
-        const res = await allVideos();
-        setVideoData(res);
-      } catch (error) {
-        toast.error('Error fetching videos');
-      } finally {
-        setInitialLoading(false);
-      }
-    };
-    fetchAllVideos();
-  }, []);
+  // useEffect(() => {
+  //   const fetchAllVideos = async () => {
+  //     try {
+  //       const res = await allVideos();
+  //       console.log('res', res);
+  //       setVideoData(res.data); // Changed from res to res.data
+  //     } catch (error) {
+  //       toast.error('Error fetching videos');
+  //     } finally {
+  //       setInitialLoading(false);
+  //     }
+  //   };
+  //   fetchAllVideos();
+  // }, []);
 
   // Fetch video-related data when dependencies change
   useEffect(() => {
@@ -219,6 +221,7 @@ const Watch = () => {
 
   // Change video handler
   const handleVideoUrl = useCallback((video: any) => {
+
     setData(video);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
@@ -351,13 +354,11 @@ const Watch = () => {
                       />
                     </Tooltip>
                     <Tooltip title="Download">
-
-                    <i
-                      className="fa-solid fa-download text-lg cursor-pointer hidden md:block"
-                      onClick={handleDownloadVideo}
-                    />                   
-                                        </Tooltip>
-
+                      <i
+                        className="fa-solid fa-download text-lg cursor-pointer hidden md:block"
+                        onClick={handleDownloadVideo}
+                      />                   
+                    </Tooltip>
                     <i className="fa-solid fa-scissors text-lg cursor-pointer md:block" />
                     <i className="fa-regular fa-bookmark text-lg cursor-pointer hidden md:block" />
                     <Tooltip title={isUserLoggedIn ? 'Save video' : 'Login to save the video'}>
