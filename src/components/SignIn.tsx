@@ -4,7 +4,7 @@ import { FormValues, FormErrors } from '../core/interface/interface';
 import { toast } from 'react-toastify';
 import Loader from './Loader';
 import { storageService } from '../Service/storageService';
-import { signIn } from '../Service/auth.service';
+import { authService } from '../Service/auth.service';
 
 
 const Login: React.FC = () => {
@@ -44,7 +44,7 @@ const Login: React.FC = () => {
       const validationErrors:any = validateForm();
       if (Object.keys(validationErrors).length === 0) {
         setLoading(true);
-        const response = await signIn(formValues)
+        const response = await authService.signIn(formValues)
         
        // In SignIn.tsx
       if (response.success) {

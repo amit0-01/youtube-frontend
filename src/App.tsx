@@ -8,7 +8,7 @@ import Loader from './components/Loader';
 import Chatbox from './components/chatbox';
 import { setupFetchInterceptor } from './core/utils/interceptor';
 
-setupFetchInterceptor(); 
+// setupFetchInterceptor(); 
 function App() {
   const [loading, setLoading] = useState<boolean>(false);
   const [isSidenavOpen, setIsSidenavOpen] = useState<boolean>(false);
@@ -48,7 +48,7 @@ function App() {
           )}
         </>
       )}
-          <Chatbox />
+        <Chatbox />
     </div>
   );
 }
